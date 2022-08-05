@@ -1,0 +1,2 @@
+Use two pointers, one is fast and one is slow.
+The fast pointer moves  through two nodes each time, slow pointer moves only one each time. When the fast one gets to the end of the list, the slow one sits at the middle of the list.

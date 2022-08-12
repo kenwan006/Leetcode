@@ -1,0 +1,1 @@
+- Iterate over each token. If it's integer, add it to the stack; If it's operator, pop out two integers from the stack and do the arithmetic operation. Push the result to the stack.

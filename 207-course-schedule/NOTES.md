@@ -1,0 +1,4 @@
+- Topological Sorting - check if it's a DAG (directed acyclic graph)..
+- https://en.wikipedia.org/wiki/Topological_sorting#:~:text=In%20computer%20science%2C%20a%20topological,before%20v%20in%20the%20ordering.
+-
+- If the finally sorted elements include all vertex then there is no cycle in the graph. Say there are 6 nodes, 1, 2, 3, 4, 5, 6, but after topological sorting the sorted array only includes 1,2 ,3 then we say there must be a cycle in the graph.

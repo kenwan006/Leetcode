@@ -1,0 +1,3 @@
+Trie-
+The root node could have up to 26 children, and each child /sub-node could have up to 26 children so on the so forth.  The totals layers represent the length of the string.
+Eg: if we insert the word "app", the "a" appears at first layer, "p" apprears at second and third layer.  Then if we insert word "apple", we found "app" already exists in the tire, but we have to add "l" at fourth layer and "e" at the fifth layer...

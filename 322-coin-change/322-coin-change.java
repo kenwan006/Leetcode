@@ -1,26 +1,15 @@
 class Solution {
-    int[] memo; //store memo[i] = dp(coins, i)
-    
     public int coinChange(int[] coins, int amount) {
-        memo = new int[amount + 1];
-        Arrays.fill(memo, -100); // initialize with any value smaller than -1;
-        return dp(coins, amount);
-    }
-    
-    public int dp(int[] coins, int amount) {
-        if(amount == 0) return 0;
-        if(amount < 0) return -1;
-        if(memo[amount] != -100) return memo[amount];//check if this amount has been visited
+        int[] dp = new int [amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
         
-        int res = Integer.MAX_VALUE;
-        for(int coin : coins) {
-            int subProblem = dp(coins, amount - coin);
-            if(subProblem == -1) continue; // if no solution to the subproblem then continue check another coin
-            res = Math.min(res, subProblem + 1);
+        for (int i = 0; i < amount + 1; i++) {
+            for(int coin : coins) {
+                if(i - coin < 0) continue;
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
         }
-        
-        res = (res == Integer.MAX_VALUE) ? -1 : res;
-        memo[amount] = res;
-        return res;
+        return (dp[amount] == amount + 1) ? -1 : dp[amount];
     }
 }

@@ -1,0 +1,3 @@
+- use two stacks: stk and minStk
+- push(val) :  if val <= the current minimum element in the stack, then add it to the minStk
+- pop() : if the top item on stk == top item on minStk, then pop out both, otherwise only pop out stk.

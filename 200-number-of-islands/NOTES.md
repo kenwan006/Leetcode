@@ -1,0 +1,2 @@
+- DFS
+- Once found "1“, increment the island number by 1, and change all the neighboring "1" to "0".

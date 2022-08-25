@@ -14,7 +14,7 @@ class Solution {
                 end = interval[1]; 
             } else if (interval[1] > end) {
                 end = interval[1];
-            } else continue;
+            } 
         }
         
         res.add(new int[]{start, end}); 

@@ -3,8 +3,6 @@ class Solution {
     LinkedList<Integer> track = new LinkedList<>();
     
     public List<List<Integer>> subsets(int[] nums) {
-        if(nums.length == 0) return null;
-        Arrays.sort(nums);
         backtrack(nums, 0);
         return res;
     }

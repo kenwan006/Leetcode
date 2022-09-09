@@ -25,15 +25,13 @@ class Solution {
             return;
         }
         
-        for (int i = start; i < digits.length(); i++) {
-            String s = mapping[digits.charAt(i) - '0'];
-            for (char ch : s.toCharArray()) {
-                track.append(ch);
-                backtrack(digits, i + 1, track);
-                track.deleteCharAt(track.length() - 1);
-            }
+        String s = mapping[digits.charAt(start) - '0'];
+        for (char ch : s.toCharArray()) {
+            track.append(ch);
+            backtrack(digits, start + 1, track);
+            track.deleteCharAt(track.length() - 1);
         }
+        
     }
-    
-    
+     
 }

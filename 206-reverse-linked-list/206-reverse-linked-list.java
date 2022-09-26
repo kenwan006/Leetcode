@@ -1,3 +1,9 @@
+/** Iterative
+* Use to node pointer curr and prev
+* save the next node of curr, next_curr = curr.next
+* point curr to prev, curr.next = prev, then move prev to curr, prev = curr and move curr to next_curr, curr = next_curr;
+*/
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -10,12 +16,14 @@
  */
 class Solution {
     public ListNode reverseList(ListNode head) {
-        if(head == null) return null;
-        ListNode curr = null;
-        while(head != null){
-            curr = new ListNode(head.val, curr);
-            head = head.next;
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode next_curr = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next_curr;
         }
-        return curr;
+        return prev;
     }
 }

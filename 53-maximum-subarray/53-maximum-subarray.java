@@ -10,7 +10,7 @@ class Solution {
         int res = nums[0]; //do not use MIN_VALUE because for loop starts at i = 1 not 0
         
         for (int i = 1; i < nums.length; i++) {
-            dp[i] = dp[i - 1] > 0 ? dp[i - 1] + nums[i] : nums[i];
+            dp[i] = nums[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
             res = Math.max(res, dp[i]);
         }
         return res;

@@ -1,23 +1,26 @@
+/** Greedy
+* Find all intervals ending before the new interval, add them to the output;
+* Find the intervals overlap with the new interval, merge them and add them to the output;
+* Find all intervals starting after the end of new interval, add them to the output.
+*/
+
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        int start = newInterval[0], end = newInterval[1];
-        int i = 0;
-        ArrayList<int[]> list = new ArrayList<>();
+        List<int[]> output = new ArrayList<int[]>();
+        int start = newInterval[0], end = newInterval[1], i = 0, n = intervals.length;
         
-        // add all intervals ending before start of newInterval
-        while(i < intervals.length && start > intervals[i][1]) {
-            list.add(intervals[i++]);
+        while (i < n && intervals[i][1] < start) output.add(intervals[i++]);
+        
+        while (i < n && intervals[i][0] <= end) {
+            start = Math.min(intervals[i][0], start);
+            end = Math.max(intervals[i][1], end);
+            i++;
         }
+        output.add(new int[]{start, end});
         
-        // merge the newIterval with existing intervals
-        while(i < intervals.length && end >= intervals[i][0]) {
-            start = Math.min(start, intervals[i][0]);
-            end = Math.max(end, intervals[i++][1]);
-        }
-        list.add(new int[]{start, end});
+        while (i < n && intervals[i][0] > end) output.add(intervals[i++]);
         
-        // add the rest intervals
-        while(i < intervals.length) list.add(intervals[i++]);
-        return list.toArray(new int[list.size()][]);
+        return output.toArray(new int[output.size()][2]);
+        
     }
 }

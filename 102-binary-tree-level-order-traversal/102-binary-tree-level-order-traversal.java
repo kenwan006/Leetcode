@@ -1,3 +1,6 @@
+/** BFS */
+
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -15,24 +18,23 @@
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> result = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
         Queue<TreeNode> queue = new LinkedList<>();
-        if(root == null) return result;
+        if (root == null) return res;
         
         queue.add(root);
-        while(!queue.isEmpty()) {
-            int levelNum = queue.size(); // length of each layer
-            List<Integer> arr = new ArrayList<>();
-            for(int i = 0; i < levelNum; i++) {
-                TreeNode node = queue.peek();
-                if(node.left != null) queue.add(node.left);
-                if(node.right != null) queue.add(node.right);
-                arr.add(node.val);
-                queue.remove();
+        while (!queue.isEmpty()) {
+            List<Integer> level = new ArrayList<>(); // initialize a list for current level
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.poll();
+                level.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
             }
-            result.add(arr);
+            res.add(level); // add current level to the result
         }
-        return result;
         
+        return res;
     }
 }

@@ -1,4 +1,1 @@
-- [1, 2, 3, 4]
-- First calcualte the product of all elements at left of a number, and get ans = [1, 1, 2, 6]
-- Then iterate from right to left using a factor R. As moving towards left R keeps updating to reflect the product of all elment at the right side of num.
-- Mulitiply the right poduct with left product of num to get the answer.
+​

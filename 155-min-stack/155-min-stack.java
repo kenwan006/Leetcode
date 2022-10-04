@@ -1,6 +1,12 @@
+/** Two stacl
+* Define two stack, stk and minStk. 
+* When pushing an item, if it's greater than the most current min item (on the top of minStk), then only push this item to stk; if it's equal to or smaller than the current min item, then push this item to both stk and minStk.
+* similar for popping
+*/
+
 class MinStack {
-    Stack<Integer> stk = new Stack<>();
-    Stack<Integer> minStk = new Stack<>();
+    private Stack<Integer> stk = new Stack<>();
+    private Stack<Integer> minStk = new Stack<>();
 
     public MinStack() {
         
@@ -8,16 +14,16 @@ class MinStack {
     
     public void push(int val) {
         stk.push(val);
-        if(minStk.isEmpty() || val <= minStk.peek()) {
+        if (minStk.isEmpty() || val <= minStk.peek()) {
             minStk.push(val);
         }
     }
     
     public void pop() {
-        if(minStk.peek().equals(stk.peek())) {
+        if (stk.peek().equals(minStk.peek())) {
             minStk.pop();
         }
-        stk.pop();        
+        stk.pop();
     }
     
     public int top() {

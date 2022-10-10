@@ -6,7 +6,7 @@ or we don't pick nums[i], then we have to use nums[0]..num[i] to fill up j evenl
 * dp[i][j] = dp[i-1][j] || dp[i-1][j - nums[i]]
 */
 
-
+/*
 class Solution {
     public boolean canPartition(int[] nums) {
         int sum = 0;
@@ -32,13 +32,13 @@ class Solution {
         return dp[m - 1][sum];
     }
 }
+*/
 
-
-/** The above approach can be optimitized
+// The above approach can be optimitized
 /* For each row we are doing the same thing, which is update the value in previous row and add them to the current row,
 * so the 2D array can be degraded to a 1D array
 * Note: start j from right to left!!
-
+*/
 class Solution {
     public boolean canPartition(int[] nums) {
         int sum = 0;
@@ -58,4 +58,3 @@ class Solution {
         return dp[sum];
     }
 }
-*/

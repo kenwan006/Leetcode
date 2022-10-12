@@ -28,7 +28,7 @@ class Solution {
             lo = l + 1;
         }
     }
-}
+} 
 
 /* DP
 * dp(i, j) represents whether s(i ... j) can form a palindromic substring.
@@ -37,14 +37,21 @@ class Solution {
 /*
 class Solution {
     public String longestPalindrome(String s) {
-        boolean[] dp = new boolean[s.length()][s.length()];
-        //dp[0][0] = true; 
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = i; j < s.length(); j++) {
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        int lo = 0, maxLen = 0;
+        for (int j = 0; j < s.length(); j++) {// put j at the outer loop
+            for (int i = 0; i <= j; i++) {
+                //if the length of s(i..j) is 1, 2 or 3, only check if s[i] == s[j]; otherwise dp
+                dp[i][j] = j - i > 2? (dp[i + 1][j - 1] && s.charAt(i) == s.charAt(j)) : s.charAt(i) == s.charAt(j);
                 
+                if (dp[i][j] && j - i + 1 > maxLen) {
+                    lo = i;
+                    maxLen = j - i + 1;
+                }
             }
         }
-      
+        return s.substring(lo, lo + maxLen);
     }
 }
+
 */

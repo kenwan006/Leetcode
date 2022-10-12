@@ -1,0 +1,3 @@
+- From the side view, if right branch is not empty then we can always see the right branch; if it's empty then we will see the left branch.
+- We need to use two queues, one for the current level, and one for the next level.
+For each node in the current level, pop it out and add their child nodes to the next level, when walking through the current level to the end  or the node at the most right side, we get it's value and add to the answer list. *** Actually one queue is enough.

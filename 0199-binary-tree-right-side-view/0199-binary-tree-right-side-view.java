@@ -20,11 +20,11 @@
 /** BFS
 * use a queue to store all nodes for each level, the node from right side view is the last item in the queue
 */
-/*
 class Solution {
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> res = new LinkedList<>();
         Queue<TreeNode> queue = new LinkedList<>();
+        if (root == null) return res;
         
         queue.add(root);
         while (!queue.isEmpty()) {
@@ -40,13 +40,13 @@ class Solution {
         return res;
     }
 } 
-*/
+
 
 /** DFS
 * Similar to dfs preorder traversal (root -> left -> right), the difference is for this problem the travsering order is root -> right -> left
 * We will only take the right most node from each level and put it to the result, which means depth == result.size().
 */
-
+/*
 class Solution {
     List<Integer> res = new LinkedList<>();
     
@@ -63,3 +63,4 @@ class Solution {
         dfs(node.left, depth + 1);
     }
 }
+*/

@@ -1,10 +1,10 @@
 /** Bottom-up DP + Binady search
 * Sort all the jobs by the start time
-* The bottom case when i = n -1 is we check the last job dp[n-1] 
-* For the ith job, we either schedule it and check the next non-conflicting job or, skip it and check the (i+1)th job
+* dp[i] - means the maximum profit if we schedule the jobs starting from job i 
+* The bottom case when i = n -1 is we only schedule the last job dp[n-1] 
+* For the ith job, we either schedule it and schedule the next non-conflicting job, or skip it and schedule starting (i+1)th job
 * dp[i] = max {profit[i] + dp[next], dp[i+1]}
 */
-
 
 class Solution {
     public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
@@ -20,7 +20,7 @@ class Solution {
         
         // bottom up DP
         int[] dp = new int[L];
-        dp[L -1] = jobs[L - 1][2]; // the base when only schedule the last job
+        dp[L -1] = jobs[L - 1][2]; // the base case is when only schedule the last job
         for (int i = L - 2; i >= 0; i--) {
             int next = findNext(jobs, i); // find the next job not conflicting with current one
             dp[i] = Math.max(jobs[i][2] + (next == -1 ? 0 : dp[next]), dp[i + 1]);

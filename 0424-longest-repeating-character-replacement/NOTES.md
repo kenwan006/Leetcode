@@ -1,0 +1,3 @@
+Given a string convert it to a string with all same characters with minimal changes. The answer to this is: length of the entire string - number of times of the maximum occurring character in the string. Eg. s = "AAABC" , 'A' has the max appearance, 3, the total length of this string is 5, so we need at least 2 changes to get "AAAAA".
+​
+Given this, we can apply the at most k changes constraint and maintain a sliding window such that (length of substring - number of times of the maximum occurring character in the substring) <= k

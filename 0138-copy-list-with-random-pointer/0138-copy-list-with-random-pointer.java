@@ -40,3 +40,5 @@ class Solution {
         return map.get(head);
     }
 }
+
+//Time: O(n); Space: O(n)

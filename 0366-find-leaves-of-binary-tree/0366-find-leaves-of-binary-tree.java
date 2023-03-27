@@ -13,36 +13,32 @@
  *     }
  * }
  */
-/** DFS
-* Start from root, find all the leaves and then remove all the leaves;
-* Repeated the last step
+/** post order traversal 
+* Check the heights for each node in the tree, for those with the same height, add them to one list.
+* - all the leaves have the height 0, include them into one list, and put this list to the 0th position of the result list
+* - for all the nodes 1 layer higher than the leaves, include them into one list and put the list to 1st postion of the res list
+* We can easily come up with a bottom-up recusive way to check each node
 */
 class Solution {
-    List<Integer> leaves;
+    List<List<Integer>> res;
     public List<List<Integer>> findLeaves(TreeNode root) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (root == null) return res;
-        while (root != null) {
-            leaves = new ArrayList<>();
-            if(isLeaf(root)) root = null; //remove the leaf
-            res.add(leaves);
-        }
+        res = new ArrayList<>();
+        getHeight(root);
         return res;
     }
     
-    //dfs - remove all the leaves from current root
-    public boolean isLeaf(TreeNode root) {
-        if (root.left == null &&  root.right == null) {
-            leaves.add(root.val);
-            return true;
-        }
-        if (root.left != null) {
-            if (isLeaf(root.left)) root.left = null; //remove the leaf
-        }
-        if (root.right != null) {
-            if (isLeaf(root.right)) root.right = null; //remove the leaf
-        }
-        return false;
+    //
+    public int getHeight(TreeNode root) {
+        if (root == null) return -1; //if we want the leaf be in 0 height, then it's -1 for null
+        int lHeight = getHeight(root.left);
+        int rHeight = getHeight(root.right);
+        int height = Math.max(lHeight, rHeight) + 1;
+        
+        //start a new level
+        if (height == res.size()) res.add(new ArrayList());
+        res.get(height).add(root.val); //add the nodes in the same height
+        
+        return height;
     }
 }
-//Time: O(n ^ 2); Space: O(n)
+//Time: O(n); Space: O(n)

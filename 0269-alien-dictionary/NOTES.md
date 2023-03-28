@@ -1,0 +1,1 @@
+The bug of this problem -  it allows  test case such as ["abc", "ab"], w2 is prefix of w1, but it should not happen lexicographically because "ab" should definitely appear before "abc".

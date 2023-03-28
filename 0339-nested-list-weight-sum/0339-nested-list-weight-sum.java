@@ -26,27 +26,21 @@
  *     public List<NestedInteger> getList();
  * }
  */
-/** DFS
-* For each item in the nestedlist,
-* If it's an integer, then item * current_depth, stop dfs for this item;
-* If it's an list, check each of them..
-*/
 class Solution {
-    int res = 0;
     public int depthSum(List<NestedInteger> nestedList) {
-        for (NestedInteger item : nestedList) {
-            res += dfs(item, 1);
+        return dfs(nestedList, 1);
+    }
+    
+    public int dfs(List<NestedInteger> list, int depth) {
+        int res = 0;
+        for (NestedInteger item : list) {
+            if (item.isInteger()) {
+                res += item.getInteger() * depth;
+            } else {
+                res += dfs(item.getList(), depth + 1);
+            }
         }
         return res;
     }
-    
-    public int dfs (NestedInteger item, int depth) {
-        if (item.isInteger()) return item.getInteger() * depth;
-        int ans = 0;
-        for (NestedInteger i : item.getList()) {
-            ans += dfs(i, depth + 1);
-        }
-        return ans;
-    }
 }
-//Time: O(n); Space: O(log(n))
+//Time: O(n); Space: O(n)

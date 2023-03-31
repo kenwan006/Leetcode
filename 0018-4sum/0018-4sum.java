@@ -12,6 +12,7 @@ class Solution {
     //Return nSum with the specific target and start index
     public List<List<Integer>> nSum(int[] nums, int start, int n, long target) {
         List<List<Integer>> res = new ArrayList<>();
+        
         //base case is 2Sum
         if (n == 2) {
             int lo = start, hi = nums.length - 1;
@@ -33,6 +34,8 @@ class Solution {
             }
         } else {
             for (int i = start; i <= nums.length - n; i++) {
+                if (i > start && nums[i] == nums[i - 1]) continue;
+                
                 //Run recursion- pick a nums[i], and get the (n-1)Sum with the new target = target-nums[i] 
                 List<List<Integer>> lists = nSum(nums, i + 1, n - 1, target - nums[i]);
                 
@@ -41,7 +44,6 @@ class Solution {
                     list.add(0, nums[i]);
                     res.add(list);
                 }
-                while (i < nums.length - 1 && nums[i] == nums[i + 1]) i++; //skip duplicate numbers
             }
         }
         

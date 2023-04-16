@@ -1,43 +1,33 @@
-/** Two pointers + Sliding window
-* Use two poniters: i- start and j- end starting from 0
-* Move end pointer until find a valid window, which contains all char in string t
-* Move start one by one to shirnk the window
-* Repeate the above 2 steps to find the shortest window
-*/
-
+/** Sliding window */
 class Solution {
     public String minWindow(String s, String t) {
-        int i = 0, j = 0, min_i = 0, minLen = Integer.MAX_VALUE; // two pointers for the sliding window
+        int m = s.length(), n = t.length();
+        if (m < n) return "";
         
-        //Create an array to map each char in t to its frequency
         int[] map = new int[58];
-        int count = 0;
-        for (char ch : t.toCharArray()) {
-            map[ch - 'A']++; // 'A' < 'a'
-            count++;
-        }
+        for (char c : t.toCharArray()) map[c - 'A']++;
         
-        //Move end until find a valid window - including all chars from t
-        while (j < s.length()) {
-            if (map[s.charAt(j) -'A'] > 0) count--;
-            map[s.charAt(j) - 'A']--; //update the freq
-            
-            //shrink the window by moveing the left boundary
+        //extend the right boundary and shrink the left boundary as needed
+        int i = 0, j = 0, count = n; //sliding window [i...j]
+        int start = 0, minLen = Integer.MAX_VALUE;
+        while (j < m) {
+            if (map[s.charAt(j) - 'A'] > 0) count--;
+            map[s.charAt(j) - 'A']--;
+
+            //shrink the window
             while (count == 0) {
-                map[s.charAt(i) - 'A']++;
-                if (map[s.charAt(i) - 'A'] > 0) count++;//only the freq of char in t could go beyond 0
-                    
-                if (j - i + 1 < minLen) {
-                    min_i = i;
+               if (j - i + 1 < minLen) {
                     minLen = j - i + 1;
+                    start = i;
                 }
-                i++;
+                if (map[s.charAt(i) - 'A'] >= 0) count++;
+                map[s.charAt(i) - 'A']++;
+                i++; //move the left boundary to right by one
             }
-            
             j++;
         }
-        if (min_i + minLen > s.length()) return "";
-        return s.substring(min_i, min_i + minLen);
+        
+        return minLen == Integer.MAX_VALUE? "" : s.substring(start, start + minLen);
         
     }
 }

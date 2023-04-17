@@ -6,11 +6,23 @@ class Solution {
         for (String s : tokens) {
             if (!operators.contains(s)) stack.push(Integer.parseInt(s));
             else {
-                int x = stack.pop(), y = stack.pop(); //two operands
-                if (s.equals("+")) stack.push(x + y);
-                if (s.equals("-")) stack.push(y - x);
-                if (s.equals("*")) stack.push(x * y);
-                if (s.equals("/")) stack.push(y / x);
+                int y = stack.pop(), x = stack.pop(); //two operands
+                int res = 0;
+                switch(s) {
+                    case "+" : 
+                        res = x + y;
+                        break;
+                    case "-" : 
+                        res = x - y;
+                        break;
+                    case "*":
+                        res= x * y;
+                        break;
+                    case "/":
+                        res= x / y;
+                        break;
+                }
+                stack.push(res);
             }
         }
         return stack.pop();

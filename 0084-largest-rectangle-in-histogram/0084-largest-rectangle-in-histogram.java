@@ -3,8 +3,8 @@
 * Since heights[i] < heights[top], top is the top index in the stack. 
 * Pop out top index top = 3 whose height is 6 from the stack, and calculate the area = heights[top] * (i - top) = 6 * (4-3) = 6
 * Pop out second index top = 2, whose height is 5 from the stack, and calcualte the area = heights[top] * (i - top) = 5 * (4 - 2) = 10 > 6
-* Keep popping until heights[i] > heights[top],
-* push i to the stack and move the pointer to i+1
+* Keep popping until heights[i] > heights[top]
+* push i to the stack and move the pointer to i+1, then the stack will sotre the inedx {1, 4}, and i moves to i = 5
 */
 class Solution {
     public int largestRectangleArea(int[] heights) {
@@ -17,9 +17,9 @@ class Solution {
             
             //Keep popping out the stack unitl heights[top] < heights[i]
             while (!stack.isEmpty() && h <= heights[stack.peek()]){
-                int curHeight = heights[stack.pop()];
                 int right = i;
-                int left = stack.isEmpty()? - 1 : stack.peek();
+                int curHeight = heights[stack.pop()];
+                int left = stack.isEmpty()? -1 : stack.peek();
                 int curArea = (right - left - 1) * curHeight;
                 maxArea = Math.max(maxArea, curArea);
             }

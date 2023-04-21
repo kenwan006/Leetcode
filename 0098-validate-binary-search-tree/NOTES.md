@@ -1,0 +1,1 @@
+- The node val could be Integer.MIN_VALUE and Integer.MAX_VALUE, so the we should not define the initial boundaries to be (Integer.MIN_VALUE, Integer.MAX_VALUE)

@@ -15,9 +15,9 @@ class Solution {
             return;
         }
         
-        int digit = Character.getNumericValue(digits.charAt(i));
+        String s = dict[digits.charAt(i) - '0'];
         
-        for (char c : dict[digit].toCharArray()) {
+        for (char c : s.toCharArray()) {
             sb.append(c);
             backtrack(digits, i + 1); //do not use i++
             sb.deleteCharAt(sb.length() - 1);

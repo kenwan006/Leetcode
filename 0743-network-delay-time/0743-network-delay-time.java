@@ -1,44 +1,38 @@
-/** Dijkstra's algo *
-* For each vertex, find their min distance from the source vertex k
-**/
+/** Dijkstra's **/
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        //build a DAG graph
-        List<List<int[]>> graph = new ArrayList<>(); // node v -> all its adjacent nodes {[u1, w1], [u2, w2]...}
-        for (int v = 0; v <= n; v++) graph.add(new ArrayList<>());
-        for (int[] edge : times) {
-            int v = edge[0], u = edge[1], w= edge[2];
-            graph.get(v).add(new int[]{u, w});
+        //build graph
+        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>(); // u -> {{v1, w1}, {u2, w2},..}
+        for (int e[] : times) {
+            int u = e[0], v = e[1], w = e[2];
+            graph.putIfAbsent(u, new HashMap<>());
+            graph.get(u).put(v, w);
         }
         
-        //distance of each node to the sorce node
-        int[] dist = new int[n + 1]; //1-indexed
-        for (int i = 0; i <= n; i++) dist[i] = -1;
-        dist[k] = 0;
+        //ues a heap to store the v with its distance to the source, {u, dist}
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        heap.offer(new int[]{k, 0});
         
         //dijkstra
-        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[1] - b[1]); //{i, dist[i]}
-        heap.offer(new int[]{k, 0});
+        int res = 0;
+        boolean[] visited = new boolean[n + 1];
         while (!heap.isEmpty()) {
             int[] curr = heap.poll();
-            int u = curr[0], d = curr[1]; //distance from source to u
-            for (int[] adj : graph.get(u)) {
-                int v = adj[0], w = adj[1]; //edge u -> v with length w
-                if (dist[v] == -1 || d + w < dist[v]) {
-                    dist[v] = d + w;
-                    heap.offer(new int[]{v, d + w});
-                }
+            int u = curr[0], dist = curr[1];
+            
+            if (visited[u]) continue;
+            res = dist; //the max dist will be popped at the end of the loop
+            visited[u] = true;
+            n--; //need to visit all n nodes
+            
+            if (!graph.containsKey(u)) continue;
+            for (int v : graph.get(u).keySet()) {
+                if (!visited[v]) heap.offer(new int[]{v, dist + graph.get(u).get(v)});
+                //A node can be added more than once with different distances to source, 
+                //but only the smallest one will be used because it will be popped out earliest from the heap, and marked as visited
             }
         }
-        
-        //find the max distance
-        int res = 0;
-        for (int i = 1; i <= n; i++) {
-            if (dist[i] == -1) return -1; // node never updated/visited
-            res = Math.max(res, dist[i]);
-        }
-        return res;
-    
+        return n == 0? res : -1;
     }
 }
-//Time: O(v + e); Space: O(v + e)
+//Time: O(e + e * log(v)); Space: O(v + e)

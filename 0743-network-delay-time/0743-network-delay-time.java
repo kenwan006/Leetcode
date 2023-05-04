@@ -2,37 +2,43 @@
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
         //build graph
-        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>(); // u -> {{v1, w1}, {u2, w2},..}
-        for (int e[] : times) {
+        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
+        for (int[] e : times) {
             int u = e[0], v = e[1], w = e[2];
             graph.putIfAbsent(u, new HashMap<>());
             graph.get(u).put(v, w);
         }
         
-        //ues a heap to store the v with its distance to the source, {u, dist}
+        //distance of each node to the source k
+        int dist[] = new int[n + 1];
+        Arrays.fill(dist, -1);
+        dist[k] = 0;
+        
+        //put the node a heap according to its distance to source
         PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[1] - b[1]);
         heap.offer(new int[]{k, 0});
         
-        //dijkstra
-        int res = 0;
-        boolean[] visited = new boolean[n + 1];
+        //dijstra
         while (!heap.isEmpty()) {
             int[] curr = heap.poll();
-            int u = curr[0], dist = curr[1];
-            
-            if (visited[u]) continue;
-            res = dist; //the max dist will be popped at the end of the loop
-            visited[u] = true;
-            n--; //need to visit all n nodes
-            
+            int u = curr[0], d = curr[1];
             if (!graph.containsKey(u)) continue;
+            
             for (int v : graph.get(u).keySet()) {
-                if (!visited[v]) heap.offer(new int[]{v, dist + graph.get(u).get(v)});
-                //A node can be added more than once with different distances to source, 
-                //but only the smallest one will be used because it will be popped out earliest from the heap, and marked as visited
+                int w = graph.get(u).get(v);
+                if (dist[v] == -1 || d + w < dist[v]) { 
+                    dist[v] = d + w; //update the distance of ajdcent node v to the source k
+                    heap.offer(new int[]{v, d + w});
+                }
             }
         }
-        return n == 0? res : -1;
+        
+        int res = 0;
+        for (int i = 1; i <= n; i++) {
+            if (dist[i] == -1) return -1; //-1 means never been visited
+            res = Math.max(res, dist[i]);
+        }
+        return res;
     }
 }
-//Time: O(e + e * log(v)); Space: O(v + e)
+//Time: O(e * log(v) + v); Space: O(v + e)

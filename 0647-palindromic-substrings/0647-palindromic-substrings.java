@@ -1,16 +1,22 @@
-/** dp **/
+/** expand around center **/
 class Solution {
+    int count;
     public int countSubstrings(String s) {
-        int n = s.length();
-        boolean[][] dp = new boolean[n][n];
-        int count = 0;
-        for (int j = 0; j < n; j++) {
-            for (int i = 0; i <= j; i++) {
-                dp[i][j] = j - i <= 2?  s.charAt(i) == s.charAt(j) : s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
-                if (dp[i][j]) count++;
-            }
+        for (int i = 0; i < s.length(); i++) {
+            expandAroundCenter(s, i, i); // length of the palindromic substring is odd
+            expandAroundCenter(s, i, i + 1); //even
         }
         return count;
     }
+    
+    //expand around the center
+    public void expandAroundCenter(String s, int l, int r) {
+        while (l >= 0 && r < s.length()) {
+            if (s.charAt(l) != s.charAt(r)) break;
+            l--;
+            r++;
+            count++;
+        }
+    }
 }
-//Time: O(n * n); Space: O(n * n)
+//Time: O(N * n); Space: O(1)

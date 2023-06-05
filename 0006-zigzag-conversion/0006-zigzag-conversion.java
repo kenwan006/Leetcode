@@ -3,18 +3,20 @@ class Solution {
         StringBuilder[] sbs = new StringBuilder[numRows];
         for (int i = 0; i < numRows; i++) sbs[i] = new StringBuilder();
         
-        int index = 0, len = s.length();
-        while (index < len) {
+        int i = 0, n= s.length();
+        while (i < n) {
             //go downward
-            for (int k = 0; k < numRows && index < len; k++) {
-                sbs[k].append(s.charAt(index++));
+            for (int j = 0; j < numRows && i < n; j++, i++) {
+                sbs[j].append(s.charAt(i));
             }
+            
             //go upward
-            for (int k = numRows - 2; k > 0 && index < len; k--) {
-                sbs[k].append(s.charAt(index++));
+            for (int j = numRows - 2; j > 0 && i < n; j--, i++) {
+                sbs[j].append(s.charAt(i));
             }
         }
         
+        //covert stringbuilder to string and concatenate all string
         String res = "";
         for (StringBuilder sb : sbs) res += sb.toString();
         return res;

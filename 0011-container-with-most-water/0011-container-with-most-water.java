@@ -1,15 +1,12 @@
-/** Two pointers **/
 class Solution {
     public int maxArea(int[] height) {
-        int maxArea = 0;
-        int i = 0, j = height.length - 1, area = 0;
+        int i = 0, j = height.length - 1, area = 0, maxArea = 0;
         while (i < j) {
+            int w = j - i;
             if (height[i] < height[j]) {
-                area = height[i] * (j - i);
-                i++;
+                area = height[i++] * w;
             } else {
-                area = height[j] * (j - i);
-                j--;
+                area = height[j--] * w;
             }
             maxArea = Math.max(maxArea, area);
         }

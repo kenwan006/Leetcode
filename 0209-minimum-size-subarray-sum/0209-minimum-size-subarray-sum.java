@@ -1,17 +1,17 @@
 /** Sliding window **/
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
-        int res = nums.length + 1;
-        int sum = 0;
-        int l = 0;
-        for (int r = 0; r < nums.length; r++) {
-            sum += nums[r];
-            while (sum >= target) {
-                res = Math.min(res, r - l + 1);
-                sum -= nums[l++];
+        int n = nums.length, res = n + 1;
+        int i = 0, j = 0, sum = nums[0];
+        while (i <= j && j < n) {
+            if (sum < target) {
+               if (++j < n) sum += nums[j];
+            } else {
+                res = Math.min(res, j - i + 1);
+                sum -= nums[i++];
             }
         }
-        return res > nums.length? 0 : res;
+        return res == (n + 1)? 0 : res;
     }
 }
-//TIme: O(n); Space: O(1)
+//Time: O(n); Space: O(1)

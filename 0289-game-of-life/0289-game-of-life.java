@@ -1,7 +1,9 @@
 class Solution {
     public void gameOfLife(int[][] board) {
         int m = board.length, n = board[0].length;
-        int[] adj = {-1, 0, 1};
+        int[] adj = {0, -1, 1};
+        
+        //For each cell, count the live neighbors including *itself*
         for (int r = 0; r < m; r++) {
             for (int c = 0; c < n; c++) {
                 int ctn = 0;
@@ -12,12 +14,12 @@ class Solution {
                         ctn++;
                     }
                 }
-                if (board[r][c] == 0) board[r][c] = -ctn;
-                else board[r][c] = ctn;
+                if (board[r][c] == 1) board[r][c] = ctn;  //For live cell, mark its live neighbors as ctn
+                if (board[r][c] == 0) board[r][c] = -ctn; //For dead cell, mark its live neighbors as -ctn
             }      
         }
         
-        //
+        //update the board
         for (int r = 0; r < m; r++) {
             for (int c = 0; c < n; c++) {
                 int num = board[r][c];

@@ -1,25 +1,14 @@
 class Solution {
     public List<String> summaryRanges(int[] nums) {
         List<String> res = new ArrayList<>();
-        int n = nums.length, i = 0; //[i..j] nums are consecutive in this interval
-        if (n == 0) return res;
-        
-        for (int j = 0; j < n - 1; j++) {
-            if (nums[j] + 1 != nums[j + 1]) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(nums[i]);
-                if (i != j) sb.append("->").append(nums[j]);
-                res.add(sb.toString());
-                i = j + 1; //update the start of the new interval
-            }
+        for (int i = 0; i < nums.length; i++) {
+            int start = nums[i];
+            while (i < nums.length - 1 && nums[i] + 1 == nums[i + 1]) i++;
+            
+            if (nums[i] != start) res.add(start + "->" + nums[i]);
+            if (nums[i] == start) res.add("" + start);
         }
-        //check the last interval
-        StringBuilder sb = new StringBuilder();
-        sb.append(nums[i]);
-        if (i != n - 1) sb.append("->").append(nums[n - 1]);
-        res.add(sb.toString());
-        
         return res;
     }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n); Space: O(1)

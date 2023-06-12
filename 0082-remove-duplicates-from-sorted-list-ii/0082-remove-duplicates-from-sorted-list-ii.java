@@ -8,24 +8,22 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-
-/** Two pointers */
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         ListNode dummy = new ListNode(-1, head);
-        ListNode prev = dummy; //initialize the prev pointing to the dummy head
-      
-        while (head != null) {
-            if (head.next != null && head.val == head.next.val) {//skip the duplicate numbers
-                while (head.next != null && head.val == head.next.val) head = head.next;
-                prev.next = head.next;
+        ListNode curr = head;
+        ListNode prev = dummy;
+        while (curr != null) {
+            if (curr.next != null && curr.val == curr.next.val) {
+                while (curr.next != null && curr.val == curr.next.val) curr = curr.next;
+                curr = curr.next;
+                prev.next = curr;
             } else {
-                prev.next = head;
+                prev.next = curr;
                 prev = prev.next;
+                curr = curr.next;
             }
-            head = head.next;
         }
         return dummy.next;
     }
 }
-//Time: O(n); Space: O(1)

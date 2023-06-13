@@ -14,17 +14,8 @@
  * }
  */
 class Solution {
-    int max = 0;
     public int maxDepth(TreeNode root) {
         if (root == null) return 0;
-        traverse(root, 1);
-        return max;
-    }
-    
-    public void traverse(TreeNode root, int depth) {
-        if (root == null) return;
-        traverse(root.left, depth + 1);
-        traverse(root.right, depth + 1);
-        max = Math.max(max, depth);
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
 }

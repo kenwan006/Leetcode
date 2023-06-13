@@ -14,23 +14,20 @@
  * }
  */
 class Solution {
-    Map<Integer, Integer> map = new HashMap<>();// val -> index 
-    
+    Map<Integer, Integer> valToIndex;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        int n = preorder.length;
-        for (int i = 0; i < n; i++) map.put(inorder[i], i);
-        return buildTree(preorder, 0, n- 1, inorder, 0, n-1);
+        int n = inorder.length;
+        valToIndex = new HashMap<>(); //map val -> index in inorder
+        for (int i = 0; i < n; i++) valToIndex.put(inorder[i], i);
+        return buildTree(preorder, 0, n - 1, inorder, 0, n - 1);
     }
     
-    public TreeNode buildTree(int[] preorder, int  preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+    private TreeNode buildTree(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart,int inEnd) {
         if (preEnd < preStart) return null;
-        int val = preorder[preStart];
-        int index = map.get(val);
-        int left_size = index - inStart; //size of left child
-        TreeNode root = new TreeNode(val);
-        root.left = buildTree(preorder, preStart + 1, preStart + left_size, inorder, inStart, index - 1);
-        root.right = buildTree(preorder, preStart + left_size + 1, preEnd, inorder, index + 1, inEnd);
-        return root;
+        int val = preorder[preStart], index = valToIndex.get(val);// index of root in the inorder
+        int lsize = index - inStart;
+        TreeNode left = buildTree(preorder, preStart + 1, preStart + lsize, inorder, inStart, index - 1);
+        TreeNode right = buildTree(preorder, preStart + lsize + 1, preEnd, inorder, index + 1, inEnd);
+        return new TreeNode(val, left, right);
     }
 }
-//Time: O(n); Space: O(n)

@@ -16,22 +16,19 @@
 class Solution {
     public void flatten(TreeNode root) {
         if (root == null) return;
-        
-        flatten(root.left);
-        flatten(root.right);
-        
-        TreeNode flat_left = root.left;
-        TreeNode flat_right = root.right;
-        
-        //find the rightmost node in the flat_left, and connect flat_right to this end
-        if (flat_left == null) return;
-        TreeNode ptr = flat_left;
-        while (ptr.right != null) ptr = ptr.right;
-        ptr.right = flat_right;
-        
-        root.right = flat_left;
-        root.left = null;
-     }
+        TreeNode curr = root;
+        while (curr != null) {
+            if (curr.left != null) {
+                //find the right-most position and connect root.right to here
+                TreeNode ptr = curr.left;
+                while (ptr.right != null) ptr = ptr.right;
+                ptr.right = curr.right;
+                curr.right = curr.left;
+                curr.left = null;
+            }
+            curr = curr.right; //move curr to next node
+        }
+    }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n); Space: O(1)
 

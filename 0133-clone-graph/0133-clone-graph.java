@@ -18,29 +18,23 @@ class Node {
 }
 */
 
-/** bfs **/
 class Solution {
+    Map<Node, Node> map = new HashMap<>();
+    
     public Node cloneGraph(Node node) {
         if (node == null) return null;
-        
-        Map<Node, Node> map = new HashMap<>(); //map node -> copy node
-        map.put(node, new Node(node.val, new ArrayList<Node>()));
-        
-        Queue<Node> queue = new LinkedList<>();
-        queue.offer(node);
-        
-        while(!queue.isEmpty()) {
-            Node curr = queue.poll();
-            for (Node neighbor : curr.neighbors) {
-                if (!map.containsKey(neighbor)) {
-                    map.put(neighbor, new Node(neighbor.val, new ArrayList<Node>()));
-                    queue.offer(neighbor);
-                }
-                map.get(curr).neighbors.add(map.get(neighbor)); //add cloned neighbor to neighbors of cloned root
-            }
-        }
+        dfs(node);
         return map.get(node);
     }
+    
+    private void dfs(Node node) {
+        if (map.containsKey(node)) return;
+        map.put(node, new Node(node.val));
+        for (Node neighbor : node.neighbors) {
+            dfs(neighbor);
+            map.get(node).neighbors.add(map.get(neighbor));
+        }
+    }
 }
+//Time: O(n); Space: O(n)
 
-//Time: O(v + e); Space: O(v)

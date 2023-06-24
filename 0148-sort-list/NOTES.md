@@ -1,0 +1,3 @@
+- breaks the list in the middle
+- sort left and right repectively
+- merge two sorted halves

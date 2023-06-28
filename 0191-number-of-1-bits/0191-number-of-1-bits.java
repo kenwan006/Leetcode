@@ -1,12 +1,11 @@
 public class Solution {
     // you need to treat n as an unsigned value
     public int hammingWeight(int n) {
-        int count = 0;
-        while (n != 0) {
-            //check the least significant bit and then shift it out
-            count += n & 1; 
+        int ctn = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((n & 1) == 1) ctn++;
             n = n >>> 1;
         }
-        return count;
+        return ctn;
     }
 }

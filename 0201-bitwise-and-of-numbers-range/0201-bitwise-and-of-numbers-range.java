@@ -1,16 +1,14 @@
-/** Find the common prefix of n and m 
-* shift both n and m to the right until m == n
-eg: m = 0001xxx, n = 0001xxx, after shifting 3 times m = n = 00000001, then shift to the left 3 time to get the resut 0001000
+/** use n & (n - 1) to turn off n's rightmost bit of 1
+* eg, n = 000011 1000, n - 1 = 000011 0111, n = n & (n - 1) = 000011 0000, we can see the rightmost 1 in n has been removed
+* Question is why do we skip all number between 000011 1000 and 000011 0000 ? because they would always reduce to 000011 0000
+* eg the number 000011 0100, the bitwise AND of this number and 000011 0000 is still 000011 0000
 **/
 class Solution {
     public int rangeBitwiseAnd(int left, int right) {
-        int shift = 0;
         while (left < right) {
-            left = left >>> 1;
-            right = right >>> 1;
-            shift++;
+            right = right & (right - 1);
         }
-        return left << shift;
+        return right;
     }
 }
 //Time: O(1); Space: O(1)

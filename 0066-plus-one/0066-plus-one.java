@@ -1,18 +1,20 @@
 class Solution {
     public int[] plusOne(int[] digits) {
-        List<Integer> list = new ArrayList<>();
-        int carry = 1;
-        for (int i = digits.length - 1; i >= 0; i--) {
-            carry += digits[i];
-            list.add(0, carry % 10);
-            carry /= 10;
+        int n = digits.length, carry = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            if (digits[i] == 9 && carry == 1) {
+                digits[i] = 0;
+                //carry = 1;
+            } else {
+                digits[i] += carry;
+                carry = 0;
+            }
         }
-        if (carry > 0) list.add(0, carry);
-        
-        int[] ans = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) ans[i] = list.get(i);
-        return ans;
+        if (carry == 1) {
+            digits = new int[n + 1];
+            digits[0] = 1;
+        }
+        return digits;
     }
 }
-//Time: O(n); Space: O(n)
-
+//Time: O(log(n)); Space: extra O(1)

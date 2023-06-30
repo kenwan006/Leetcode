@@ -1,13 +1,19 @@
-/** Iteratively **/
+/** Recursively **/
 class Solution {
     public double myPow(double x, int n) {
-        double res = 1.0;
-        for (int i = n; i != 0; i /= 2) {
-            if (i % 2 != 0) res *= x; //i could be negative, so i % 2 could be 0, 1, -1
+        if (n == 0) return 1.0;
+        
+        if (n == Integer.MIN_VALUE) { //-MIN = MAX + 1, which will be overflowed
+            n /= 2;
             x *= x;
         }
-        return n < 0? 1 / res : res;
+        
+        if (n < 0) {
+            n = -n;
+            x = 1/x;
+        }
+        
+        return n % 2 == 0? myPow(x * x, n / 2) : myPow(x * x, n / 2) * x;
     }
 }
-//Time: O(log(n)); Space: O(1)
-
+//Time: O(log(n)); Space: O(log(n))

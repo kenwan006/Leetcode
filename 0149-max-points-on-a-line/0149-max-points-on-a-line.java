@@ -7,8 +7,7 @@ class Solution {
         int n = points.length, maxCount = 0;
         for (int i = 0; i < n; i++) {
             Map<Double, Integer> map = new HashMap<>();
-            for (int j = 0; j < n; j++) {
-                if (j == i) continue;
+            for (int j = i + 1; j < n; j++) {
                 double slope = getSlope(points, i, j);
                 map.putIfAbsent(slope, 0);
                 map.put(slope, map.get(slope) + 1);

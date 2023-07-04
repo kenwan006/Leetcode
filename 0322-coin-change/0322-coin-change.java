@@ -1,16 +1,16 @@
-/** dp **/
 class Solution {
     public int coinChange(int[] coins, int amount) {
-        //List<Integer> list = Arrays.asList(coins);
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount + 1); //amount + 1 to avoid the case that amount = 0
+        int[] dp = new int[amount + 1]; 
+        Arrays.fill(dp, amount + 1); //set initial val to be large
         dp[0] = 0;
-        for (int i = 1; i <= amount; i++) {
+        for (int i = 0; i <= amount; i++) {
             for (int coin : coins) {
-                if (i >= coin) dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                if (coin > i) continue;
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
             }
         }
-        return dp[amount] == amount + 1? -1 : dp[amount];
+        return dp[amount] > amount?  -1 : dp[amount];
     }
 }
-//Time: O(n); Space: O(n)
+//Time: O(m * n); Space: O(n)
+

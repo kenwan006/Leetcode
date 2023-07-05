@@ -5,11 +5,11 @@ class Solution {
         for (int i = 0; i < n; i++) Arrays.fill(path[i], Integer.MAX_VALUE);
         path[0][0] = triangle.get(0).get(0);
         
-        for (int i = 0; i < n - 1; i++) { //i stops at n - 2 not n - 1
+        for (int i = 1; i < n; i++) {
             for (int j = 0; j <= i; j++) {
-                //triangle[i][j] either go to triangle[i+1][j] or triangle[i+1][j+1]
-                path[i + 1][j] = Math.min(path[i + 1][j], path[i][j] + triangle.get(i + 1).get(j));
-                path[i + 1][j + 1] = Math.min(path[i + 1][j + 1], path[i][j] + triangle.get(i + 1).get(j + 1));
+                if (j > 0) path[i][j] = Math.min(path[i][j], path[i - 1][j - 1]);
+                if (j < n) path[i][j] = Math.min(path[i][j], path[i - 1][j]);
+                path[i][j] += triangle.get(i).get(j);
             }
         }
         

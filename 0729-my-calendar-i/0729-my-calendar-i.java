@@ -1,21 +1,26 @@
+/** TreeMap **/
 class MyCalendar {
-    PriorityQueue<int[]> booked;
+    TreeMap<Integer, Integer> booked;
+    
     public MyCalendar() {
-        booked = new PriorityQueue<>((a, b) -> a[0] - b[0]); //sort in the start time
+        booked = new TreeMap<>(); // map start -> end of a booked interval
     }
     
     public boolean book(int start, int end) {
-        Iterator<int[]> iterator = booked.iterator();
-        while (iterator.hasNext()) {
-            int[] curr = iterator.next();
-            if (start >= curr[1] || end <= curr[0]) continue;
-            else return false;
-        }
-        booked.offer(new int[]{start, end});
+        // the closest interval before this new start
+        Integer s = booked.floorKey(start);
+        if (s != null && booked.get(s) > start) return false;
+        
+        // the closest interval behind this new start
+        Integer ss = booked.ceilingKey(start);
+        if (ss != null && ss < end) return false;
+        
+        booked.put(start, end);
         return true;
     }
 }
-//Time: O(n * log(n)); Space: O(n)
+//Time: O(log(n)); Space: O(n)
+
 /**
  * Your MyCalendar object will be instantiated and called as such:
  * MyCalendar obj = new MyCalendar();

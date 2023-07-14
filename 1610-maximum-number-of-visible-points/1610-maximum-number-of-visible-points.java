@@ -10,11 +10,12 @@ class Solution {
                 count++;
                 continue;
             }
-            double deg = Math.atan2(dy, dx) * (180 / Math.PI); 
+            double deg = Math.atan2(dy, dx) * (180 / Math.PI); //concatenate to handle edge case
             angles.add(deg);
-            if (deg < 0) angles.add(deg + 360); //handle the edge of -180 and 180
         }
         Collections.sort(angles);
+        List<Double> temp = new ArrayList<>(angles);
+        for (Double deg : temp) angles.add(deg + 360);
         
         //sliding window - [i, j]
         int maxCount = 0, i = 0;

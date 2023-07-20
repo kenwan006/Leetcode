@@ -1,1 +1,1 @@
-check the residue of each number first, if not contained in the hashmap, then add it for the later use when checking other numebs.
+​

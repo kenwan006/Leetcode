@@ -7,7 +7,7 @@ class Solution {
         for (int i = 0; i < n - 2; i++) {
             //chose the 1st num
             if (i > 0 && nums[i] == nums[i - 1]) continue;
-            if (nums[i] > 0) continue;
+            if (nums[i] > 0) break;
             int target = -nums[i];
             
             //2sum for 2nd  and 3rd num

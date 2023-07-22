@@ -8,14 +8,13 @@ class Solution {
             //chose the 1st num
             if (i > 0 && nums[i] == nums[i - 1]) continue;
             if (nums[i] > 0) break;
-            int target = -nums[i];
             
-            //2sum for 2nd  and 3rd num
+            //2Sum for 2nd and 3rd num
             int lo = i + 1, hi = n - 1;
             while (lo < hi) {
-                if (nums[lo] + nums[hi] < target){
+                if (nums[lo] + nums[hi] + nums[i] < 0){
                     lo++;
-                } else if (nums[lo] + nums[hi] > target) {
+                } else if (nums[lo] + nums[hi] + nums[i] > 0) {
                     hi--;
                 } else {
                     res.add(Arrays.asList(nums[i], nums[lo], nums[hi]));

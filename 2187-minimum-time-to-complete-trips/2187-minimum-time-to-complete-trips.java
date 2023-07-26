@@ -17,7 +17,7 @@ class Solution {
     //given time t, check if the total completed trips >= totalTrips
     private boolean validate(int[] time, long t, int totalTrips) {
         long trips = 0;
-        for (int ti : time) trips += Math.floor(t / ti);
+        for (int ti : time) trips += t / ti;
         return trips >= totalTrips;
     }
 }

@@ -1,30 +1,21 @@
-/** Two pointers 
-* Iterate over the string s reversely
-* pointer i points to the first non space char, and j points to the next space char, then one finds the word s[j + 1, i]
-*/
 class Solution {
     public String reverseWords(String s) {
         StringBuilder sb = new StringBuilder();
-        int n = s.length();
-        int i = n - 1;
+        int i = s.length() - 1;
         while (i >= 0) {
-            //find the first non space 
+            //remove the spaces between two words
             while (i >= 0 && s.charAt(i) == ' ') i--;
             
-            if (i < 0) break; //break if the remainings are all space!!
+            if (i < 0) break; //reaches the leading space
             
-            //find the next space 
-            int j = i;
-            while (j >= 0 && s.charAt(j) != ' ') j--;
+            //find the start and end index of each word
+            int j = i + 1;
+            while (i >= 0 && s.charAt(i) != ' ') i--;
             
-            //append the word
-            sb.append(s.substring(j + 1, i + 1)).append(" "); //substring [ )
-            i = j; //update i
+            sb.append(s.substring(i + 1, j)).append(' ');
         }
-        
-        sb.deleteCharAt(sb.length() - 1); //delete the redundant space at the end
-        
-        return sb.toString();
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 }
-//Time: O(n); Space: O(n), no extra space than n
+//Time: O(n); Space: O(n)
+

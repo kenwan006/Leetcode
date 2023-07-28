@@ -11,13 +11,12 @@ class Solution {
         while (i < n) {
             swap(chars, i, j);
             i += 2 * k;
-            j += 2 * k;
+            j = Math.min(i + k - 1, n - 1); //right bound can't exceed n - 1
         }
         return new String(chars);
     }
     
     private void swap(char[] chars, int i, int j) {
-        if (j >= chars.length) j = chars.length - 1; //right bound can't exceed n - 1
         for (; i < j; i++, j--) {
             char temp = chars[i];
             chars[i] = chars[j];

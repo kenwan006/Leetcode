@@ -11,16 +11,17 @@
  */
 public class Solution {
     public ListNode detectCycle(ListNode head) {
-        ListNode slow = head, fast = head;
-        //find the meeting point if it exists
+        ListNode fast = head, slow = head;
+        
+        //find meeting points of two pointers
         while (fast != null && fast.next != null) {
-            slow = slow.next;
             fast = fast.next.next;
+            slow = slow.next;
             if (slow == fast) break;
         }
-        if(fast == null || fast.next == null) return null;
+        if (fast == null || fast.next == null) return null;
         
-        //move slow back to head, and move slow and fast at same time, same pace
+        //put slow back to start and move both simultaneously
         slow = head;
         while (slow != fast) {
             slow = slow.next;

@@ -1,0 +1,4 @@
+- BFS
+- we have to use a queue (curr) to store all of the nodes at current level, and add each node val to a list.
+- pop out a node each time and store its children to another queue (next)
+- once curr is empty, then assign the next to curr, and empty the next.

@@ -14,22 +14,24 @@
  * }
  */
 
-/** Iterative - preorder traversal **/
+/** BFS **/
 class Solution {
     public TreeNode invertTree(TreeNode root) {
         if (root == null) return null;
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-        while (!stack.isEmpty()) {
-            TreeNode curr = stack.pop();
-            //swap left and right child
-            TreeNode temp = curr.left;
-            curr.left = curr.right;
-            curr.right = temp;
-            
-            //push left and right child to the stack
-            if (curr.right != null) stack.push(curr.right);
-            if (curr.left != null) stack.push(curr.left);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode curr = queue.poll();
+                //swap the left and right for curr node
+                TreeNode temp = curr.left;
+                curr.left = curr.right;
+                curr.right = temp;
+                
+                if (curr.left != null) queue.offer(curr.left);
+                if (curr.right != null) queue.offer(curr.right);
+            }
         }
         return root;
     }

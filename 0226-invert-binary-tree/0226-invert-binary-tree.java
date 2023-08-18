@@ -13,13 +13,24 @@
  *     }
  * }
  */
+
+/** Iterative - preorder traversal **/
 class Solution {
     public TreeNode invertTree(TreeNode root) {
         if (root == null) return null;
-        TreeNode left = invertTree(root.right);
-        TreeNode right = invertTree(root.left);
-        root.left = left;
-        root.right = right;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+            //swap left and right child
+            TreeNode temp = curr.left;
+            curr.left = curr.right;
+            curr.right = temp;
+            
+            //push left and right child to the stack
+            if (curr.right != null) stack.push(curr.right);
+            if (curr.left != null) stack.push(curr.left);
+        }
         return root;
     }
 }

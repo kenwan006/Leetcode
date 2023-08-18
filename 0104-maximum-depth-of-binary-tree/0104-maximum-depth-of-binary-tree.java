@@ -19,9 +19,9 @@ class Solution {
         traverse(root, 1);
         return max;
     }
+    
     private void traverse(TreeNode root, int depth) {
         if (root == null) return;
-        
         max = Math.max(max, depth);
         traverse(root.left, depth + 1);
         traverse(root.right, depth + 1);

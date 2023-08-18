@@ -24,15 +24,17 @@ class Node {
 class Solution {
     public Node connect(Node root) {
         if (root == null) return null;
-        connect(root.left, root.right);
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Node curr = queue.poll();
+                if (i != size - 1) curr.next = queue.peek();
+                if (curr.left != null) queue.offer(curr.left);
+                if (curr.right != null) queue.offer(curr.right);
+            }
+        }
         return root;
-    }
-    
-    private void connect(Node node1, Node node2) {
-        if (node1 == null || node2 == null) return;
-        node1.next = node2;
-        connect(node1.left, node1.right);
-        connect(node2.left, node2.right);
-        connect(node1.right, node2.left);
     }
 }

@@ -17,21 +17,24 @@ class Node {
 };
 */
 
-/** DFS **/
+/** BFS **/
 class Solution {
-    int max = 0;
     public int maxDepth(Node root) {
         if (root == null) return 0;
-        traverse(root, 1);
-        return max;
-    }
-    
-    private void traverse(Node root, int depth) {
-        if (root == null) return;
-        max = Math.max(max, depth);
-        //check each child
-        for (Node child : root.children) {
-            traverse(child, depth + 1);
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        int depth = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Node curr = queue.poll();
+                for (Node child : curr.children) {
+                    if (child != null) queue.offer(child);
+                }
+            }
+            depth++;
         }
+        return depth;
     }
 }
+//Time: O(n); Space: O(n)

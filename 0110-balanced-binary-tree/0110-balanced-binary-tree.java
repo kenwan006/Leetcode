@@ -14,21 +14,19 @@
  * }
  */
 class Solution {
-    boolean isBalanced = true;
+    boolean res = true;
     public boolean isBalanced(TreeNode root) {
         getDepth(root);
-        return isBalanced;
+        return res;
     }
     
-    public int getDepth(TreeNode root) {
+    /** post order traversal **/
+    private int getDepth(TreeNode root) {
         if (root == null) return 0;
-        
         int l = getDepth(root.left);
         int r = getDepth(root.right);
-        
-        if (Math.abs(l - r) > 1) isBalanced = false;
-        
+        if (Math.abs(l -r) > 1) res = false;
         return Math.max(l, r) + 1;
     }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n); Space: O(log(n))

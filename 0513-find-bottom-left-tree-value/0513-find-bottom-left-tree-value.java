@@ -13,23 +13,26 @@
  *     }
  * }
  */
-
-/** BFS **/
+/** DFS **
+* go to the deepest level and see from the leftside view 
+*/
 class Solution {
+    int maxDepth = -1; // just in case root is a leaf
+    int res = 0;
     public int findBottomLeftValue(TreeNode root) {
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-        int res = 0;
-        while (!queue.isEmpty()) {
-            res = queue.peek().val; //leftmost one at current level
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                TreeNode curr = queue.poll();
-                if (curr.left != null) queue.offer(curr.left);
-                if (curr.right != null) queue.offer(curr.right);
-            }
-        }
+        dfs(root, 0);
         return res;
     }
+    
+    private void dfs(TreeNode root, int depth) {
+        if (root == null) return;
+        if (depth > maxDepth) {
+            maxDepth = depth;
+            res = root.val;
+        }
+        dfs(root.left, depth + 1);
+        dfs(root.right, depth + 1);
+    }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n); Space: O(log(n))
+

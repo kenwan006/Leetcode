@@ -22,13 +22,14 @@ class Solution {
     
     private void dfs(TreeNode root, List<String> res, String s) {
         if (root == null) return;
+        
+        s += root.val;
         if (root.left == null && root.right == null) {
-            s += root.val;
             res.add(s);
             return;
         }
         
-        s += root.val;
+        
         s += "->";
         
         dfs(root.left, res, s);

@@ -14,22 +14,25 @@
  * }
  */
 class Solution {
-    Map<Integer, Integer> valToIndex;
-    
+    Map<Integer, Integer> valToIndex = new HashMap<>();
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        valToIndex = new HashMap<>();
-        int n = inorder.length;
-        for (int i = 0; i < n; i++) valToIndex.put(inorder[i], i);
-        return buildTree(inorder, 0, n - 1, postorder, 0, n - 1);
+        for (int i = 0; i < inorder.length; i++) {
+            valToIndex.put(inorder[i], i);
+        }
+        return buildTree(inorder, 0, inorder.length - 1, postorder, 0, postorder.length - 1);
     }
     
-    private TreeNode buildTree(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd) {
+    private TreeNode buildTree(int[] inorder, int inStart, int inEnd, int[] postorder, int poStart, int poEnd) {
+        // base case
         if (inStart > inEnd) return null;
-        int val = postorder[postEnd], index = valToIndex.get(val);
-        int lsize = index - inStart;
-        TreeNode left = buildTree(inorder, inStart, index - 1, postorder, postStart, postStart + lsize - 1);
-        TreeNode right = buildTree(inorder, index + 1, inEnd, postorder, postStart + lsize, postEnd - 1);
-        return new TreeNode(val, left, right);
         
+        int val = postorder[poEnd];
+        int index = valToIndex.get(val); //root index in inorder
+        int lsize = index - inStart;
+        TreeNode root = new TreeNode(val);
+        root.left = buildTree(inorder, inStart, index - 1, postorder, poStart, poStart + lsize - 1);
+        root.right = buildTree(inorder, index + 1, inEnd, postorder, poStart + lsize, poEnd - 1);
+        return root;
     }
 }
+//Time: O(n); Space: O(n)

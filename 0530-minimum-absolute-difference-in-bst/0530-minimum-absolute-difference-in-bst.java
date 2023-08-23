@@ -13,6 +13,7 @@
  *     }
  * }
  */
+/** Inorde traversal **/
 class Solution {
     int res = 100000;
     TreeNode prev;
@@ -26,13 +27,10 @@ class Solution {
         
         traverse(root.left);
         
-        if (prev == null) {
-            prev = root;
-        } else {
-            res = Math.min(res, root.val - prev.val);
-            prev = root;
-        }
+        if (prev != null) res = Math.min(res, root.val - prev.val);
+        prev = root;//update prev 
         
         traverse(root.right);
     }
 }
+//Time: O(n); Space: O(n)

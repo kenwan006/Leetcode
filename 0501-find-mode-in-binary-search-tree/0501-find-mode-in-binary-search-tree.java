@@ -14,15 +14,13 @@
  * }
  */
 class Solution {
-    Map<Integer, Integer> map = new HashMap<>();
     int maxCount = 0;
+    int count = 0;
+    TreeNode prev = null;
+    List<Integer> res = new ArrayList<>();
     
     public int[] findMode(TreeNode root) {
         traverse(root);
-        List<Integer> res = new ArrayList<>();
-        for (int key : map.keySet()) {
-            if (map.get(key) == maxCount) res.add(key);
-        }
         int[] ans = new int[res.size()];
         for (int i = 0; i < ans.length; i++) ans[i] = res.get(i);
         return ans;
@@ -32,10 +30,18 @@ class Solution {
         if (root == null) return;
         traverse(root.left);
         
-        map.put(root.val, map.getOrDefault(root.val, 0) + 1);
-        maxCount = Math.max(maxCount, map.get(root.val)); //update maxCount
+        if (prev != null && prev.val == root.val) count++;
+        else count = 1;
+        
+        if (count > maxCount) {
+            res.clear();
+            maxCount = count;
+        } 
+        if (count == maxCount) {
+            res.add(root.val);
+        }
+        prev = root; //move to next node
         
         traverse(root.right);
     }
 }
-//Time: O(n); Space: O(n)

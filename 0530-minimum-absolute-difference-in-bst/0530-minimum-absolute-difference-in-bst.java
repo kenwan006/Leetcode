@@ -14,25 +14,25 @@
  * }
  */
 class Solution {
-    int diff = 100000;
-    int preval = 100000;
+    int res = 100000;
+    TreeNode prev;
     public int getMinimumDifference(TreeNode root) {
-        dfs(root);
-        return diff;
+        traverse(root);
+        return res;
     }
     
-    //inorder traversal on a binary search tree - sequential order
-    private void dfs(TreeNode root) {
+    private void traverse(TreeNode root) {
         if (root == null) return;
-        dfs(root.left);
         
-        diff = Math.min(diff, Math.abs(root.val - preval));
-        preval = root.val;
+        traverse(root.left);
         
-        dfs(root.right);
+        if (prev == null) {
+            prev = root;
+        } else {
+            res = Math.min(res, root.val - prev.val);
+            prev = root;
+        }
         
+        traverse(root.right);
     }
 }
-//Time: O(n); Space: O(n)
-
-

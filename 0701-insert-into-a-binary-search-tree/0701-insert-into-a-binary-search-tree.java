@@ -15,23 +15,9 @@
  */
 class Solution {
     public TreeNode insertIntoBST(TreeNode root, int val) {
-        TreeNode insert = new TreeNode(val);
-        if (root == null) return insert;
-        
-        // find the position to insert the new node
-        TreeNode parent = null;
-        TreeNode curr = root;
-        while (curr != null) {
-            parent = curr;
-            if (curr.val > val) curr = curr.left;
-            else curr = curr.right;
-        }
-        
-        // insert
-        if (parent.val > val) parent.left = insert;
-        else parent.right = insert;
-        
+        if (root == null) return new TreeNode(val);
+        if (root.val < val) root.right = insertIntoBST(root.right, val);
+        else root.left = insertIntoBST(root.left, val);
         return root;
     }
 }
-//Time: O(n); Space: O(1)

@@ -8,21 +8,20 @@ class Solution {
         return res;
     }
     
-    private void backtrack(int[] nums, int target, int start) {
+    private void backtrack(int[] candidates, int target, int start) {
+        if (sum > target) return;
         if (sum == target) {
-            res.add(new LinkedList<>(track));
+            res.add(new LinkedList(track));
             return;
         }
         
-        if (sum > target) return;
-        
-        for (int i = start; i < nums.length; i++) {
-            sum += nums[i];
-            track.add(nums[i]);
-            backtrack(nums, target, i);
+        for (int i = start; i < candidates.length; i++) {
+            int num = candidates[i];
+            sum += num;
+            track.add(num);
+            backtrack(candidates, target, i);
             track.removeLast();
-            sum -= nums[i];
+            sum -= num;
         }
     }
-    
 }

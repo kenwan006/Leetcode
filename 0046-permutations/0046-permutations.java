@@ -1,28 +1,26 @@
 class Solution {
     List<List<Integer>> res = new LinkedList<>();
     LinkedList<Integer> track = new LinkedList<>();
-    boolean[] visited;
-    
+    boolean[] used;
     public List<List<Integer>> permute(int[] nums) {
-        visited = new boolean[nums.length];
-        Arrays.sort(nums);
-        backtrack(nums);
+        used = new boolean[nums.length];
+        backTracking(nums);
         return res;
     }
     
-    private void backtrack(int[] nums) {
+    private void backTracking(int[] nums) {
         if (track.size() == nums.length) {
-            res.add(new LinkedList<>(track));
+            res.add(new LinkedList(track));
             return;
         }
         
         for (int i = 0; i < nums.length; i++) {
-            if (visited[i]) continue;
-            visited[i] = true;
+            if (used[i]) continue;
             track.add(nums[i]);
-            backtrack(nums);
+            used[i] = true;
+            backTracking(nums);
+            used[i] = false;
             track.removeLast();
-            visited[i] = false;
         }
     }
 }

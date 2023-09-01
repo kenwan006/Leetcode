@@ -1,31 +1,44 @@
-/** Eulerian Path **/
+/** Backtracking **/
 class Solution {
-    Map<String, PriorityQueue<String>> graph;
-    LinkedList<String> path;
+    Map<String, List<String>> map;
+    LinkedList<String> track;
+    int count = 0;
     public List<String> findItinerary(List<List<String>> tickets) {
-        graph = new HashMap<>();
-        path = new LinkedList<>();
-        //build the graph for flights
+        map = new HashMap<>();
+        track = new LinkedList<>();
+        count = tickets.size()+ 1; 
+        
+        //build the map
         for (List<String> ticket : tickets) {
-            String departure = ticket.get(0), arrival = ticket.get(1);
-            graph.putIfAbsent(departure, new PriorityQueue<>());
-            graph.get(departure).add(arrival);
+            String src = ticket.get(0), dst = ticket.get(1);
+            map.putIfAbsent(src, new ArrayList<>());
+            // the same [src, dst] could exist multiple times
+            //eg, "JFK" : {"ATL", "ATL", "SJC", "SFO"...}
+            map.get(src).add(dst); 
         }
         
-        dfs("JFK");
-        return path;
+        //sort destinations for each source in lexical order
+        for (String src : map.keySet()) {
+            Collections.sort(map.get(src));
+        }
+        track.add("JFK");
+        backTracking("JFK");
+        return track;
     }
     
-    //dfs - find the eulerian path
-    public void dfs(String departure) {
-        if (graph.containsKey(departure)) {
-            PriorityQueue<String> arrivals = graph.get(departure);
-            while (!arrivals.isEmpty()) {
-                dfs(arrivals.poll());
-            }
-        }
+    private boolean backTracking(String src) {
+        if (track.size() == count) return true;
         
-        path.addFirst(departure);
+        if (!map.containsKey(src)) return false;
+        
+        for (int i = 0; i < map.get(src).size(); i++) {
+            String dst = map.get(src).get(i);
+            track.add(dst);
+            map.get(src).remove(i); //remove this src -> dst from map
+            if (backTracking(dst)) return true;
+            track.removeLast();
+            map.get(src).add(i, dst); //restore the map
+        }
+        return false;
     }
 }
-//Time: O(e * log(e / v)); Space: O(v + e)

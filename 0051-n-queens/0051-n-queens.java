@@ -1,52 +1,48 @@
-/** Backtraking **/
 class Solution {
     List<List<String>> res = new LinkedList<>();
     LinkedList<String> track = new LinkedList<>();
     
     public List<List<String>> solveNQueens(int n) {
-        //build the baord
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) Arrays.fill(board[i], '.');
+        char[][] board = new  char[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(board[i], '.');
+        }
         
-        backtrack(board, 0);
+        backTracking(board, 0);
         return res;
     }
     
-    //backtrack - i means the current row number
-    public void backtrack(char[][] board, int i) {
-        //reached the last row
+    private void backTracking(char[][] board, int i) {
         if (i == board.length) {
             res.add(new LinkedList(track));
             return;
         }
         
-        //check each col at current row
         for (int j = 0; j < board.length; j++) {
+            if (!valid(board, i, j)) continue;
             board[i][j] = 'Q';
-            if (isValid(board, i, j)) {
-                track.add(String.valueOf(board[i]));
-                backtrack(board, i + 1); //move to next row
-                track.removeLast();
-            }
+            track.add(String.valueOf(board[i]));
+            backTracking(board, i + 1);
+            track.removeLast();
             board[i][j] = '.';
         }
     }
     
-    //check if it's valid to put Q at (i, j)
-    public boolean isValid(char[][] board, int row, int col) {
-        //upper cell - same column
-        for (int i = 0; i < row; i++) {
-            if (board[i][col] == 'Q') return false;
-        }
-        //upper left - diagonal
-        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j] == 'Q') return false;
-        }
-        //upper right - diagonal
-        for (int i = row - 1, j = col + 1; i >= 0 && j < board.length; i--, j++) {
-            if (board[i][j] == 'Q') return false;
+    private boolean valid(char[][] board, int i , int j) {
+        //check top left diagonal
+        for (int r = i - 1, c = j - 1; r >= 0 && c >= 0; r--, c--) {
+            if (board[r][c] == 'Q') return false;
         }
         
+        //check top
+        for (int r = i - 1; r >= 0; r--) {
+            if (board[r][j] == 'Q') return false;
+        }
+        
+        //check top right diagonal
+        for (int r = i - 1, c = j + 1; r >= 0 && c < board.length; r--, c++) {
+            if (board[r][c] == 'Q') return false;
+        }
         return true;
     }
 }

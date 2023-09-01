@@ -1,23 +1,22 @@
 class Solution {
     public void solveSudoku(char[][] board) {
-        backTracking(board);
+        backTracking(board, 0, 0);
     }
     
-    private boolean backTracking(char[][] board) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] != '.') continue;
-                for (char c = '1'; c <= '9'; c++) {
-                    if (valid(board, i, j, c)) {
-                        board[i][j] = c;
-                        if (backTracking(board)) return true;
-                        board[i][j] = '.';
-                    }
-                }
-                return false;
+    private boolean backTracking(char[][] board, int i, int j) {
+        if (j == 9) return backTracking(board, i + 1, 0);
+        if (i == 9) return true; //it means all rows have been checked
+        
+        if (board[i][j] != '.') return backTracking(board, i, j + 1);
+        
+        for (char c = '1'; c <= '9'; c++) {
+            if (valid(board, i, j, c)) {
+                board[i][j] = c;
+                if (backTracking(board, i, j + 1)) return true;
+                board[i][j] = '.';
             }
         }
-        return true;
+        return false;
     }
     
     private boolean valid(char[][] board, int i, int j, char c) {

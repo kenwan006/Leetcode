@@ -1,11 +1,18 @@
 class Solution {
     public boolean canJump(int[] nums) {
-        int farthest = nums[0]; //keep updating the farthest position one cen jump to
-        for (int i = 1; i < nums.length; i++) {
-            if (farthest < i) return false;
-            farthest = Math.max(farthest, i + nums[i]);
+        int i = 1, n = nums.length;
+        int start = 1, end = nums[0];
+        int farthest = 0;
+        while (i < n) {
+            for (int j = start; j <= end && j < n; j++) {
+                farthest = Math.max(farthest, j + nums[j]);
+            }
+            //update starting position for the next jump
+            i++;
+            start = end + 1;
+            end = farthest;
+            if (end >= n - 1) return true;
         }
-        return true;
+        return farthest >= n - 1;
     }
 }
-//Time: O(n); Space: O(1)

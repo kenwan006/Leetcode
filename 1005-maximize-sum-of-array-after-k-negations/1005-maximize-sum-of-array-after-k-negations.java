@@ -1,23 +1,22 @@
 class Solution {
     public int largestSumAfterKNegations(int[] nums, int k) {
         Arrays.sort(nums);
-        int i = 0, n = nums.length;
-        int sum = 0;
-        
-        while (k > 0 && i < n && nums[i] < 0) {
-            nums[i] = -nums[i++]; //flip the smallest negative num
-            k--;
+        for (int i = 0; i < nums.length && k > 0; i++) {
+            if (nums[i] < 0) {
+                nums[i] *= -1;
+                k--;
+            }
         }
         
-        Arrays.sort(nums); //sort again after flipping..
-        
-        nums[0] = k % 2 == 0? nums[0] : -nums[0];
-        
+        int sum = 0, min = 101;
         for (int num : nums) {
             sum += num;
+            min = Math.min(min, num);
         }
-        return sum;
         
+        sum = k % 2 == 0? sum : sum - 2 * min;
+        
+        return sum;
     }
 }
 //Time: O(n * log(n)); Space: O(1)

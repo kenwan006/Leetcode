@@ -1,26 +1,21 @@
+/** Greedy
+** Sort the points by the start in ascending order 
+**/
 class Solution {
     public int findMinArrowShots(int[][] points) {
-        // sort the points by their end position
-        // do not use the comparator (a, b) -> a[1] - b[1] to avoid int overflow
-        Arrays.sort(points, new Comparator<>(){
-            @Override
-            public int compare(int[] a, int[] b) {
-                return Integer.compare(a[1], b[1]);
-            }
-        });
-        
-        int burst = 1;
+        Arrays.sort(points, (a, b) -> Integer.compare(a[0], b[0]));
         int end = points[0][1];
+        int burst = 1;
         for (int[] point : points) {
-            // let the burst position overlap with other points as many as possible
-            // if no overlap, then start a new burst - at end of the point
-            if (end < point[0]) {
+            if (end < point[0]) { //if no intersection, start a new burst
                 end = point[1];
                 burst++;
+            } else {
+                //if intersection, update the end to be the min end among the intersected points
+                end = Math.min(end, point[1]);
             }
         }
         return burst;
     }
 }
-//Time: O(n * log(n)); Space: O(1)
-
+//Time: O(n * log(n)); Space: O(log(n))

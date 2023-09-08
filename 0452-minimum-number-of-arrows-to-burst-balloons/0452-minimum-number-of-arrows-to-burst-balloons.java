@@ -1,24 +1,26 @@
 class Solution {
     public int findMinArrowShots(int[][] points) {
-        Comparator<int[]> comparator = new Comparator<>(){
+        // sort the points by their end position
+        // do not use the comparator (a, b) -> a[1] - b[1] to avoid int overflow
+        Arrays.sort(points, new Comparator<>(){
             @Override
             public int compare(int[] a, int[] b) {
-                if (a[1] > b[1]) return 1;
-                else if (a[1] < b[1]) return -1;
-                else return 0;
+                return Integer.compare(a[1], b[1]);
             }
-        };
-        Arrays.sort(points, comparator);
+        });
         
-        //always shoot the end 
-        int end = points[0][1], count = 1;
-        for (int[] p : points) {
-            if (end < p[0]) {
-                count++;
-                end = p[1]; // start a new burst
-            } 
+        int burst = 1;
+        int end = points[0][1];
+        for (int[] point : points) {
+            // let the burst position overlap with other points as many as possible
+            // if no overlap, then start a new burst - at end of the point
+            if (end < point[0]) {
+                end = point[1];
+                burst++;
+            }
         }
-        return count;
+        return burst;
     }
 }
 //Time: O(n * log(n)); Space: O(1)
+

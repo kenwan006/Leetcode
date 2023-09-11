@@ -1,44 +1,37 @@
-/** Dijkstra's **/
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
+        int[] dist = new int[n + 1]; //1-indexed
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        boolean[] visited = new boolean[n + 1];
+        
         //build graph
-        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
+        List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) graph.add(new ArrayList());
         for (int[] e : times) {
-            int u = e[0], v = e[1], w = e[2];
-            graph.putIfAbsent(u, new HashMap<>());
-            graph.get(u).put(v, w);
+            int u = e[0], v =e[1], w = e[2];
+            graph.get(u).add(new int[]{v, w}); 
         }
         
-        //distance of each node to the source k
-        int dist[] = new int[n + 1];
-        Arrays.fill(dist, -1);
-        dist[k] = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]); //sort by dist to source node k
+        pq.add(new int[]{k, 0});
         
-        //put the node a heap according to its distance to source
-        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        heap.offer(new int[]{k, 0});
-        
-        //dijstra
-        while (!heap.isEmpty()) {
-            int[] curr = heap.poll();
-            int u = curr[0], d = curr[1];
-            if (!graph.containsKey(u)) continue;
-            
-            for (int v : graph.get(u).keySet()) {
-                int w = graph.get(u).get(v);
-                if (dist[v] == -1 || d + w < dist[v]) { 
-                    dist[v] = d + w; //update the distance of ajdcent node v to the source k
-                    heap.offer(new int[]{v, d + w});
+        while (!pq.isEmpty()) {
+            int[] node = pq.poll();
+            int u = node[0], d = node[1];
+            if (!visited[u]) {
+                visited[u] = true; //mark as visited
+                if (--n == 0) return d;
+            }
+            //check its neighbors
+            for (int[] neighbor : graph.get(u)) {
+                int v = neighbor[0], w = neighbor[1];
+                if (!visited[v] && d + w < dist[v]) {
+                    dist[v] = d + w;
+                    pq.add(new int[]{v, dist[v]}); //add this node to pq for future check
                 }
             }
         }
-        
-        int res = 0;
-        for (int i = 1; i <= n; i++) {
-            if (dist[i] == -1) return -1; //-1 means never been visited
-            res = Math.max(res, dist[i]);
-        }
-        return res;
+        return -1;
     }
 }
-//Time: O(e * log(v) + v); Space: O(v + e)
+//Time: O(v + e * log(v)); Space: O(v + e)

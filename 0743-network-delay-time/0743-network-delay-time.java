@@ -18,10 +18,10 @@ class Solution {
         while (!pq.isEmpty()) {
             int[] node = pq.poll();
             int u = node[0], d = node[1];
-            if (!visited[u]) {
-                visited[u] = true; //mark as visited
-                if (--n == 0) return d;
-            }
+            if (visited[u]) continue;
+            visited[u] = true; //mark as visited
+            if (--n == 0) return d;
+                
             //check its neighbors
             for (int[] neighbor : graph.get(u)) {
                 int v = neighbor[0], w = neighbor[1];

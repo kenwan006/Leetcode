@@ -1,4 +1,3 @@
-/** dp **/
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
         int n = cost.length;
@@ -11,4 +10,3 @@ class Solution {
         return dp[n];
     }
 }
-//Time: O(n); Space: O(n)

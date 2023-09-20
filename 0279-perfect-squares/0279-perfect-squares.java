@@ -1,32 +1,29 @@
-/** BFS
-* keep substract a perfect square number from the target unitl it becomes 0
-* eg, n = 10, the first square number could be 1, 4, 9, after subtraction, the remainder would be 9, 6, 1. 
-* Add all the possible remainders to a queue, and poll one by one. For each polled number, repeate the above the process.
-* When the remainder becomes 0, the total subtractions would be the number of square numbers.
-*/
+/** DP **/
 class Solution {
     public int numSquares(int n) {
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        queue.offer(n);
-        int step = 0;
-        while (!queue.isEmpty()) {
-            step++;
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int num = queue.poll();
-                //add the remainder to queue after subtraction to num
-                for (int j = 1; j * j <= num; j++) {
-                    int remainder = num - j * j;
-                    if (remainder == 0) return step;
-                    if (!visited.contains(remainder)) { //skip number that's already visited
-                        queue.offer(remainder);
-                        visited.add(remainder);
-                    }
-                }       
+        int[] nums = getSquares(n);
+        int m = nums.length;
+        
+        int[] dp = new int[n + 1]; //dp[j] - least number of nums to choose to fill the volume j
+        Arrays.fill(dp, n + 1);
+        dp[0] = 0;
+        
+        for (int i = 0; i < m; i++) { // i - num to choose
+            for (int j = nums[i]; j <= n; j++) { // j - bag volume
+                dp[j] = Math.min(dp[j], dp[j - nums[i]] + 1);
             }
         }
-        return step;
+        return dp[n];
+    }
+    
+    // return list of perfect squares <= n
+    private int[] getSquares(int n) {
+        int size = (int) Math.sqrt(n);
+        int[] squares = new int[size];
+        for (int i = 1; i <= size; i++) {
+            squares[i - 1] = i * i;
+        }
+        return squares;
     }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n * sqrt(n)); Space: O(n)

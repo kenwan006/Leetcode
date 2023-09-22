@@ -1,35 +1,41 @@
-/** DP
-* dp[i][j] - refers to the max profit up until prices[j] using within i transactions
-* dp[i][j] = max(dp[i][j - 1], prices[j] - prices[jj] + dp[i - 1][jj]) for jj (buy day) in range [0, j-1];
-*          = max(dp[i][j - 1], prices[j] + max(dp[i - 1][jj] - prices[jj]) for jj in [0, j-1];
-* dp[0][j] = 0, for 0 transaction
-* dp[i][0] = 0, if there is only one price, no transaction can be made
-*/
 class Solution {
     public int maxProfit(int k, int[] prices) {
+     /**
+        Here are (2k + 1) states:
+        0 - no transaction made
+        1 - holding a stock after 1 trasaction at the end of ith day
+        2 - not holding a stock after 1 trasaction
+        .
+        .
+        .
+     2k-1 - holding a stock after k trasactions 
+     2k   - not holding a stock after k trasactions
+        
+        Let j = 1, 3, 5, .. for state of holding stock
+        Let j + 1 = 2, 4, 6... for state of not holding stock
+        
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] - prices[i]); //stay or buy at the end of ith day
+        dp[i][j + 1] = Math.max(dp[i - 1][j + 1], dp[i - 1][j] + prices[i]); //stay or sell at the end of ith day
+        
+     **/
+        
         int n = prices.length;
-        if (n <= 1) return 0;
+        int[][] dp = new int[n][2 * k + 1];
         
-        //when k is large, just accumulate all the rising gap
-        int maxProfit = 0;
-        if (k >= n / 2) {
-            for (int i = 1; i < n; i++) {
-                if (prices[i] > prices[i - 1]) maxProfit += prices[i] - prices[i - 1];
-            }
-            return maxProfit;
+        //base case i = 0
+        for (int j = 1; j < k * 2; j += 2) {
+            dp[0][j] = -prices[0]; // holding a stock at the end of 0th day after (j+1)/2 transactions
+            dp[0][j + 1] = 0;  // not holding a stock at the end of 0th day after (j+1)/2 transactions
         }
         
-        //when k is not large, run the dp
-        int[][] dp = new int[k + 1][n];
-        int localMax = Integer.MIN_VALUE;
-        for (int i = 1; i <= k; i++) {
-            for (int j = 1; j < n; j++) {
-                localMax = Math.max(localMax, dp[i - 1][j - 1] - prices[j - 1]); 
-                dp[i][j] = Math.max(dp[i][j - 1], prices[j] + localMax);
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < k * 2; j += 2) {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] - prices[i]);
+                dp[i][j + 1] = Math.max(dp[i - 1][j + 1], dp[i - 1][j] + prices[i]);
             }
-            localMax = Integer.MIN_VALUE; //reset
         }
-        return dp[k][n - 1];
+        return dp[n - 1][2 * k];
     }
 }
-//Time: O(n * k); Space: O(n * k)
+//Time: O(k * n); Space: O(k * n)
+

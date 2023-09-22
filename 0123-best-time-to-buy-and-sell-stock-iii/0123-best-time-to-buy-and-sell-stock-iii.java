@@ -1,30 +1,36 @@
+/** DP **/
 class Solution {
     public int maxProfit(int[] prices) {
         int n = prices.length;
-        int[] leftProfit = new int[n]; //leftProfit[i] - refers to the max profit for prices[0..i] within one transaction
-        /** pad addtional 0 to the right for convenience **/
-        int[] rightProfit = new int[n + 1];//rightProfit[i] - refers to the max profit for preices[i..n] within one transaction
+        int[][] dp = new int[n][5];
         
-        //check from left to right - update buy price if needed
-        leftProfit[0] = 0;
-        int buy = prices[0];
+        /** Here are five states:
+         0 - no transaction made
+         1 - holding a stock after one trasaction
+         2 - not holding a stock after one trasaction
+         3 - holding a stock after two transactions
+         4 - not holding a stock after two transactions
+         
+         dp[i][0] = 0;
+         dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]); //either stay or buy 1st on ith day
+         dp[i][2] = Math.max(dp[i - 1][2], dp[i - 1][1] + prices[i]); //either stay or sell 1st on ith day
+         dp[i][3] = Math.max(dp[i - 1][3], dp[i - 1][2] - prices[i]); //either stay or buy 2nd on ith day
+         dp[i][4] = Math.max(dp[i - 1][4], dp[i - 1][3] + prices[i]); //either stay or sell 2nd on ith day
+        **/
+        
+        dp[0][1] = -prices[0];
+        dp[0][2] = 0;
+        dp[0][3] = -prices[0]; //buy - sell - buy on 0th day
+        dp[0][4] = 0;
+        
         for (int i = 1; i < n; i++) {
-            if (prices[i] < buy) buy = prices[i]; 
-            leftProfit[i] = Math.max(leftProfit[i - 1], prices[i] - buy);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+            dp[i][2] = Math.max(dp[i - 1][2], dp[i - 1][1] + prices[i]); 
+            dp[i][3] = Math.max(dp[i - 1][3], dp[i - 1][2] - prices[i]); 
+            dp[i][4] = Math.max(dp[i - 1][4], dp[i - 1][3] + prices[i]); 
         }
         
-        //check from right to left - update sell price if needed
-        rightProfit[n - 1] = 0;
-        int sell = prices[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            if (prices[i] > sell) sell = prices[i]; //update the sell price
-            rightProfit[i] = Math.max(rightProfit[i + 1], sell - prices[i]);
-        }
-        
-        //find the max profit within two transactions
-        int res = 0;
-        for (int i = 0; i < n; i++) res = Math.max(res, leftProfit[i] + rightProfit[i + 1]);
-        return res;
+        return dp[n - 1][4];
     }
 }
 //Time: O(n); Space: O(n)

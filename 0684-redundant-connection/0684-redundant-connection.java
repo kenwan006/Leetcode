@@ -1,38 +1,27 @@
 class Solution {
     public int[] findRedundantConnection(int[][] edges) {
-        UF uf = new UF(edges.length + 1);
+        int n = edges.length;
+        UF uf = new UF(n);
         for (int[] edge : edges) {
-            int u = edge[0], v = edge[1];
-            if (uf.find(u) == uf.find(v)) return edge;
-            uf.union(u, v);
+            if (uf.union(edge[0], edge[1])) return edge;
         }
-        return new int[]{-1, -1};
+        return null;
     }
     
     class UF {
         int[] parent;
-        int[] size;
-        
         public UF(int n) {
-            this.parent = new int[n];
-            this.size = new int[n];
-            for (int i = 0; i < n; i++) parent[i] = i;
+            parent = new int[n + 1]; //0, 1, 2..n
+            for (int i = 0; i <= n; i++) parent[i] = i;
         }
-        
-        public void union(int p, int q) {
+        private boolean union(int p, int q) {
             int rootP = find(p);
             int rootQ = find(q);
-            
-            if (size[rootP] > size[rootQ]) {
-                size[rootP] += size[rootQ];
-                parent[rootQ] = rootP;
-            } else {
-                size[rootQ] += size[rootP];
-                parent[rootP] = rootQ;
-            }
+            if (rootP == rootQ) return true;
+            parent[rootP] = rootQ;
+            return false;
         }
-        
-        public int find(int x) {
+        private int find(int x) {
             if (parent[x] != x) {
                 parent[x] = find(parent[x]);
             }
@@ -40,5 +29,3 @@ class Solution {
         }
     }
 }
-//Time: O(v + e); Space: O(v)
-

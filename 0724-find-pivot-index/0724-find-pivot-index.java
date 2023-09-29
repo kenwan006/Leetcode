@@ -1,16 +1,14 @@
 class Solution {
     public int pivotIndex(int[] nums) {
-        int n = nums.length;
-        int[] prefix = new int[n]; //prefix[i] - sum of nums before nums[i] - exclusively
-        int[] suffix = new int[n]; //suffix[i] - sum of nums behind nums[i] - exclusively
+        int sum = 0;
+        for (int num : nums) sum += num;
         
-        for (int i = 1; i < n; i++) prefix[i] = prefix[i - 1] + nums[i - 1];
-        for (int i = n - 2; i >= 0; i--) suffix[i] = suffix[i + 1] + nums[i + 1];
-        
-        for (int i = 0; i < n; i++) {
-            if (prefix[i] == suffix[i]) return i;
+        int prefix = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (sum - prefix - nums[i] == prefix) return i;
+            prefix += nums[i];
         }
         return -1;
     }
 }
-//Time: O(n); Space: O(n)
+//Time: O(n); Space: O(1)

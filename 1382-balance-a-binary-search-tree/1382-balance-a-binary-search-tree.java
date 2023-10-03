@@ -14,30 +14,27 @@
  * }
  */
 class Solution {
+    List<Integer> list = new ArrayList<>();
     public TreeNode balanceBST(TreeNode root) {
-        //add all nodes to a list in asc order
-        List<TreeNode> list = new ArrayList<>();
-        traverse(root, list);
-        //build a balanced bst
-        return balanced(list, 0, list.size() - 1);
+        traverse(root);
+        return balanced(0, list.size() - 1);
     }
     
-    //convert a list of TreeNode to a balanced bst
-    private TreeNode balanced(List<TreeNode> list, int lo, int hi) {
+    //build balanced bst based on the list of nodes
+    private TreeNode balanced(int lo, int hi) {
         if (lo > hi) return null;
         int mid = lo + (hi - lo) / 2;
-        TreeNode root = list.get(mid);
-        root.left = balanced(list, lo, mid - 1);
-        root.right = balanced(list, mid + 1, hi);
+        TreeNode root = new TreeNode(list.get(mid));
+        root.left = balanced(lo, mid - 1);
+        root.right = balanced(mid + 1, hi);
         return root;
     }
     
-    //in order traversal
-    private void traverse(TreeNode root, List<TreeNode> list) {
+    //in-order travesal to collect each node
+    private void traverse(TreeNode root) {
         if (root == null) return;
-        traverse(root.left, list);
-        list.add(root);
-        traverse(root.right, list);
+        traverse(root.left);
+        list.add(root.val);
+        traverse(root.right);
     }
 }
-//Time: O(n); Space: O(n)

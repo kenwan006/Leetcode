@@ -16,22 +16,22 @@
 class Solution {
     int sum = 0;
     public int sumNumbers(TreeNode root) {
-        dfs(root, "");
+        dfs(root, 0);
         return sum;
     }
     
-    private void dfs(TreeNode root, String path) {
+    private void dfs(TreeNode root, int prev) {
         if (root == null) return;
         
-        path += root.val;
+        int curr = prev * 10 + root.val;
         
-        //return if a leaf found
+        //add the path val to sum if it comes to the leaf
         if (root.left == null && root.right == null) {
-            sum += Integer.valueOf(path);
+            sum += curr;
             return;
         }
         
-        dfs(root.left, path);
-        dfs(root.right, path);
+        dfs(root.left, curr);
+        dfs(root.right, curr);
     }
 }

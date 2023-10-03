@@ -14,19 +14,24 @@
  * }
  */
 class Solution {
-    int res = 0;
+    int sum = 0;
     public int sumNumbers(TreeNode root) {
-        traverse(root, 0);
-        return res;
+        dfs(root, "");
+        return sum;
     }
     
-    private void traverse(TreeNode root, int sum) {
+    private void dfs(TreeNode root, String path) {
         if (root == null) return;
         
-        sum = sum * 10 + root.val;
-        if (root.left == null && root.right == null) res += sum;
+        path += root.val;
         
-        traverse(root.left, sum);
-        traverse(root.right, sum);
-    }  
+        //return if a leaf found
+        if (root.left == null && root.right == null) {
+            sum += Integer.valueOf(path);
+            return;
+        }
+        
+        dfs(root.left, path);
+        dfs(root.right, path);
+    }
 }

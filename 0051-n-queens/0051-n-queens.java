@@ -1,48 +1,48 @@
 class Solution {
     List<List<String>> res = new LinkedList<>();
-    LinkedList<String> track = new LinkedList<>();
-    
     public List<List<String>> solveNQueens(int n) {
-        char[][] board = new  char[n][n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(board[i], '.');
-        }
-        
-        backTracking(board, 0);
+        char[][] board = new char[n][n]; //build a chess board
+        for (int i = 0; i < n; i++) Arrays.fill(board[i], '.');
+        backtrack(0, board);
         return res;
     }
     
-    private void backTracking(char[][] board, int i) {
+    private void backtrack(int i, char[][] board) {
         if (i == board.length) {
-            res.add(new LinkedList(track));
+            res.add(toList(board));
             return;
         }
-        
         for (int j = 0; j < board.length; j++) {
-            if (!valid(board, i, j)) continue;
-            board[i][j] = 'Q';
-            track.add(String.valueOf(board[i]));
-            backTracking(board, i + 1);
-            track.removeLast();
-            board[i][j] = '.';
+            if (validate(i, j, board)) {
+                board[i][j] = 'Q';
+                backtrack(i + 1, board);
+                board[i][j] = '.';
+            }
         }
     }
     
-    private boolean valid(char[][] board, int i , int j) {
-        //check top left diagonal
-        for (int r = i - 1, c = j - 1; r >= 0 && c >= 0; r--, c--) {
-            if (board[r][c] == 'Q') return false;
+    private List<String> toList(char[][] board) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) {
+            list.add(new String(board[i])); //convert each row of the board to a string
         }
-        
-        //check top
-        for (int r = i - 1; r >= 0; r--) {
-            if (board[r][j] == 'Q') return false;
+        return list;
+    }
+    
+    private boolean validate(int row, int col, char[][] board) {
+        //check upper
+        for (int i = row - 1; i >= 0; i--) {
+            if (board[i][col] == 'Q') return false;
         }
-        
-        //check top right diagonal
-        for (int r = i - 1, c = j + 1; r >= 0 && c < board.length; r--, c++) {
-            if (board[r][c] == 'Q') return false;
+        //check upper left
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 'Q') return false;
+        }
+        //check upper right
+        for (int i = row - 1, j = col + 1; i >=0 && j < board.length; i--, j++) {
+            if (board[i][j] == 'Q') return false;
         }
         return true;
     }
+    
 }

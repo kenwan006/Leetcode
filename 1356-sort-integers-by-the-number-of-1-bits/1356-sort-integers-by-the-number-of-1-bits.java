@@ -1,22 +1,9 @@
 class Solution {
     public int[] sortByBits(int[] arr) {
-        int n = arr.length;
-        int[][] counts = new int[n][2];
-        for (int i = 0; i < n; i++) {
-            counts[i][0] = countOne(arr[i]);
-            counts[i][1] = arr[i];
-        }
+        Integer[] nums = Arrays.stream(arr).boxed().toArray(Integer[] :: new);
+        Arrays.sort(nums, (a, b) -> countOne(a) == countOne(b)? a - b : countOne(a) - countOne(b));
         
-        Comparator<int[]> comparator = new Comparator<>(){
-            @Override
-            public int compare(int[] a, int[] b) {
-                if (a[0] == b[0]) return Integer.compare(a[1], b[1]);
-                else return Integer.compare(a[0], b[0]);
-            }
-        };
-        
-        Arrays.sort(counts, comparator);
-        for (int i = 0; i < n; i++) arr[i] = counts[i][1];
+        for (int i = 0; i < arr.length; i++) arr[i] = nums[i];
         return arr;
     }
     

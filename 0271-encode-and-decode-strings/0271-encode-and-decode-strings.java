@@ -2,26 +2,27 @@ public class Codec {
 
     // Encodes a list of strings to a single string.
     public String encode(List<String> strs) {
-        StringBuilder encoded = new StringBuilder();
-        for (String s : strs) { //use lengthOfString + "/" to delimit each string
-            encoded.append(s.length()).append("/").append(s);
+        //use word length + a divider '#' to seperate the words from each other
+        StringBuilder sb = new StringBuilder();
+        for (String s : strs) {
+            sb.append(s.length()).append('#');
+            sb.append(s);
         }
-        return encoded.toString();
+        return sb.toString();
     }
 
     // Decodes a single string to a list of strings.
     public List<String> decode(String s) {
-        List<String> decoded = new ArrayList<>();
-        int start = 0;
-        while (start < s.length()) {
-            int del = s.indexOf('/', start);
-            int len = Integer.parseInt(s.substring(start, del));
-            start = del + len + 1; //next start
-            String str = s.substring(del + 1, start);
-            decoded.add(str);
-           
+        List<String> res = new ArrayList<>();
+        int i = 0, n = s.length();
+        while (i < n) {
+            int j = i; //find the length of a string
+            while (j < n && s.charAt(j) != '#') j++;
+            int len = Integer.parseInt(s.substring(i, j));
+            i = j + 1 + len; //next start
+            res.add(s.substring(j + 1, i));
         }
-        return decoded;
+        return res;
     }
 }
 

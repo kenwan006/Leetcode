@@ -5,17 +5,13 @@ class Solution {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
         
-        int n = map.size();
-        if (n == 1) return 1;
-        
-        //use an array to store all freqs and sort them
-        int[] freq = new int[n];
-        int i = 0;
-        for (int f :  map.values()) freq[i++] = f;
-        Arrays.sort(freq);
+        //store all freq to a list and sort them
+        List<Integer> freq = new ArrayList<>();
+        for (int f : map.values()) freq.add(f);
+        Collections.sort(freq);
         
         int res = Integer.MAX_VALUE;
-        int base = freq[0];
+        int base = freq.get(0);
         int sum = 0;
         while (base != 0) {
             sum = partition(freq, base, base + 1);
@@ -25,14 +21,15 @@ class Solution {
         return res;
     }
     
-    //for each f in freq, find the i and y that i * x + j * y = f
-    private int partition(int[] freq, int x, int y) {
+    //for each f in freq, find the i and j that i * x + j * y = f
+    private int partition(List<Integer> freq, int x, int y) {
         int sum = 0;
         for (int f : freq) {
-            int ctn = Integer.MAX_VALUE;
+            int ctn = Integer.MAX_VALUE; //count groups for each f
             for (int i = 0; i <= f / x; i++) {
                 if ((f - i * x) % y != 0) continue;
-                ctn = Math.min(ctn, i + (f - i * x) / y);
+                int j = (f - i * x) / y;
+                ctn = Math.min(ctn, i + j);
             }
             if (ctn == Integer.MAX_VALUE) return 0; //no such i and j exist
             sum += ctn;

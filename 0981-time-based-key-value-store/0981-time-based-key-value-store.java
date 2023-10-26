@@ -1,7 +1,14 @@
-/** Binary Search **/
-
 class TimeMap {
-    Map<String, List<Pair<Integer, String>>> map; // key, (timestamp, value)
+    class Node {
+        int time;
+        String value;
+        public Node(int time, String value) {
+            this.time = time;
+            this.value = value;
+        }
+    }
+    
+    Map<String, List<Node>> map; //key -> list of nodes
     
     public TimeMap() {
         map = new HashMap<>();
@@ -9,24 +16,30 @@ class TimeMap {
     
     public void set(String key, String value, int timestamp) {
         map.putIfAbsent(key, new ArrayList<>());
-        map.get(key).add(new Pair(timestamp, value));
+        map.get(key).add(new Node(timestamp, value));
     }
     
     public String get(String key, int timestamp) {
         if (!map.containsKey(key)) return "";
+        List<Node> list = map.get(key);
+        if (timestamp < list.get(0).time) return "";
         
-        List<Pair<Integer, String>> list = map.get(key);
-        if (list.get(0).getKey() > timestamp) return "";
-        
+        //binary search - find the larget time <= timestamp
         int lo = 0, hi = list.size() - 1;
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
-            int time = list.get(mid).getKey();
-            if (time == timestamp) return list.get(mid).getValue();
-            else if (time > timestamp) hi = mid - 1;
-            else lo = mid + 1;
+            Node node = list.get(mid);
+            int time = node.time;
+            
+            if (time == timestamp) {
+                return node.value;
+            } else if (time > timestamp) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
         }
-        return list.get(hi).getValue();
+        return list.get(hi).value;
     }
 }
 

@@ -22,10 +22,7 @@ class Solution {
             }
             head = head.next;
         }
-        if (list1 != null) head.next = list1;
-        if (list2 != null) head.next = list2;
-        
+        head.next = list1 == null? list2 : list1;
         return dummy.next;
     }
 }
-//Time: O(m + n); Space: O(1)

@@ -11,35 +11,45 @@
 class Solution {
     public void reorderList(ListNode head) {
         //find the second half
-        ListNode slow = head, fast = head;
+        ListNode fast = head, slow = head;
         while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
+            slow = slow.next; 
             fast = fast.next.next;
         }
+        
         ListNode second = slow.next;
-        slow.next = null; //break the connection of two parts
+        slow.next = null; //break the connection with first half
         
         //reverse the second half
-        ListNode prev = null;
-        while (second != null) {
-            ListNode temp = second.next;
-            second.next = prev;
-            prev = second;
-            second = temp;
-        }
-        second = prev; // prev is now the head of the reversed list
+        second = reverse(second);
         
-        //merge first and second half
-        ListNode first = head;
-        while (second != null) { //size of second is <= the first 
-            ListNode temp = first.next;
-            first.next = second;
-            first = temp;
-            
-            temp = second.next;
-            second.next = first;
-            second = temp;
-        } 
+        //weave with first half
+        weave(head, second);
+        
+    }
+    
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next; 
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+    
+    private void weave(ListNode list1, ListNode list2) {
+        ListNode head = new ListNode(-1);
+        while (list1 != null && list2 != null) {
+            head.next = list1;
+            head = head.next;
+            list1 = list1.next;
+        
+            head.next = list2;
+            head = head.next;
+            list2 = list2.next;
+        }
+        head.next = list1 == null? list2 : list1;
     }
 }
-//Time: O(n); Space: O(1)

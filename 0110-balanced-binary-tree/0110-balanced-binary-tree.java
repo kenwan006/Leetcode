@@ -14,19 +14,20 @@
  * }
  */
 class Solution {
-    boolean res = true;
+    boolean balanced = true;
     public boolean isBalanced(TreeNode root) {
-        getDepth(root);
-        return res;
+        depth(root);
+        return balanced;
     }
     
-    /** post order traversal **/
-    private int getDepth(TreeNode root) {
+    private int depth(TreeNode root) {
         if (root == null) return 0;
-        int l = getDepth(root.left);
-        int r = getDepth(root.right);
-        if (Math.abs(l -r) > 1) res = false;
-        return Math.max(l, r) + 1;
+        int left = depth(root.left);
+        int right = depth(root.right);
+        if (Math.abs(left - right) > 1) {
+            balanced = false;
+            return -1; //stop traversing once unbalanced tree found
+        }
+        return Math.max(left, right) + 1;
     }
 }
-//Time: O(n); Space: O(log(n))

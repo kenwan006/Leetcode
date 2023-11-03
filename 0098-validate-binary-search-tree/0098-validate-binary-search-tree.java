@@ -13,20 +13,14 @@
  *     }
  * }
  */
-/** Inorder traversal **/
 class Solution {
-    TreeNode max;
     public boolean isValidBST(TreeNode root) {
+        return validate(root, null, null);
+    }
+    
+    private boolean validate(TreeNode root, Integer min, Integer max) {
         if (root == null) return true;
-        
-        boolean left = isValidBST(root.left);
-        
-        if (max == null || max.val < root.val) max = root;
-        else return false;
-        
-        boolean right = isValidBST(root.right);
-        
-        return left && right;
+        if ((min != null && root.val <= min) || (max != null && root.val >= max)) return false;
+        return validate(root.left, min, root.val) && validate(root.right, root.val, max);
     }
 }
-//Time: O(n); Space: O(log(n))

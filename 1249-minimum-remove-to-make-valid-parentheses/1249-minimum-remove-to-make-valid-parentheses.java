@@ -1,13 +1,13 @@
 class Solution {
     public String minRemoveToMakeValid(String s) {
         Stack<Integer> stack = new Stack<>(); //index of the '(' 
-        StringBuilder sb = new StringBuilder(s);
+        Set<Integer> removed = new HashSet<>();
         int n = s.length();
         for (int i = 0; i < n; i++) {
             char c = s.charAt(i);
             if (c == ')') {
                 if (stack.isEmpty()) {
-                    sb.setCharAt(i, '#');
+                    removed.add(i);
                 } else {
                     stack.pop();
                 }
@@ -16,15 +16,13 @@ class Solution {
             }
         }
         
-        //remove the remainig '(' in the stack
-        while (!stack.isEmpty()) sb.setCharAt(stack.pop(), '#');
+        while (!stack.isEmpty()) removed.add(stack.pop());
         
-        //remove all '#'
         String res = "";
-        for (int i = 0; i < sb.length(); i++) {
-            char c = sb.charAt(i);
-            if (c != '#') res += c;
+        for (int i = 0; i < n; i++) {
+            if (!removed.contains(i)) res += s.charAt(i);
         }
         return res;
+     
     }
 }

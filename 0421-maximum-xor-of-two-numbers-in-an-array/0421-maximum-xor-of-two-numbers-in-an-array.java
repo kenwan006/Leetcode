@@ -1,28 +1,40 @@
 class Solution {
+    class TrieNode {
+        TrieNode[] children = new TrieNode[2];
+        public TrieNode(){};
+    }
+    
     public int findMaximumXOR(int[] nums) {
-        int maxXor = 0;
-        int currXor = 0;
-        for (int i = 30; i >= 0; i--) {
-            /**
-            move the num to right by 30 bits, and get the leftmost bit
-            move the num to right by 29 bits, and get two leftmost bits
-            ...
-            **/
-            maxXor <<= 1; //move the maxXor to left by 1bit, and check if 1 can be added to the rightmost bit
-            currXor = maxXor | 1; //set the rightmost to 1. Difference bwtween maxXor and currXor is the rightmost bit
-            
-            Set<Integer> prefixes = new HashSet<>();
-            for (int num : nums) prefixes.add(num >> i);
-            
-            //find the pair (x, y) in the set that x ^ y = currXor  <=> x = currXor ^ y
-            //if we can find it, then update maxXor = currXor, otherwise no change to maxXor
-            for (int x : prefixes) {
-                if (prefixes.contains(currXor ^ x)) {
-                    maxXor = currXor;
-                    break;
-                }
+        // build the Trie
+        // most significant (leftmost) bit on the top of the Trie
+        TrieNode root = new TrieNode();
+        for (int num : nums) {
+            TrieNode curr = root;
+            for (int i = 31; i >= 0; i--) { //move 30 bits to the right, to get the most left bit
+                int currBit = (num >>> i) & 1;
+                if (curr.children[currBit] == null) curr.children[currBit] = new TrieNode();
+                curr = curr.children[currBit];
             }
         }
-        return maxXor;
+        
+        //for each num, starting from the most left bit
+        //and at the same layer, check if its negation bit exist in the Trie 
+        int max = 0;
+        for (int num : nums) {
+            TrieNode curr = root;
+            int sum = 0;
+            for (int i = 31; i >= 0; i--) {
+                int x =(num >>> i) & 1; //current bit in num
+                int y = x ^ 1; //negation of current bit
+                if (curr.children[y] != null) {
+                    curr = curr.children[y];
+                    sum += (1 << i);
+                } else {
+                    curr = curr.children[x];
+                }
+            }
+            max = Math.max(max, sum);
+        }
+        return max;
     }
 }

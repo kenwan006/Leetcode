@@ -9,10 +9,10 @@ class Solution {
             int z = x + y + carry;
             carry = z / 10;
             z %= 10;
-            sb.append((char)(z + '0'));
+            sb.append(z);
         }
         
-        if (carry > 0) sb.append((char)(carry + '0'));
+        if (carry > 0) sb.append(carry);
         
         return sb.reverse().toString();
     }

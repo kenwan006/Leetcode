@@ -1,48 +1,51 @@
 class Solution {
     List<List<String>> res = new LinkedList<>();
+    char[][] board;
     public List<List<String>> solveNQueens(int n) {
-        char[][] board = new char[n][n]; //build a chess board
+        board = new char[n][n];
         for (int i = 0; i < n; i++) Arrays.fill(board[i], '.');
-        backtrack(0, board);
+        backtrack(0);
         return res;
     }
     
-    private void backtrack(int i, char[][] board) {
+    private void backtrack(int i) {
         if (i == board.length) {
-            res.add(toList(board));
+            List<String> list = convert(board);
+            res.add(list);
             return;
         }
+           
         for (int j = 0; j < board.length; j++) {
-            if (validate(i, j, board)) {
-                board[i][j] = 'Q';
-                backtrack(i + 1, board);
-                board[i][j] = '.';
-            }
+            if (!isValid(i, j)) continue; //skip if filling cell[i][j] with 'Q' generate a invalid placement
+            board[i][j] = 'Q';
+            backtrack(i + 1);
+            board[i][j] = '.';
         }
     }
     
-    private List<String> toList(char[][] board) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < board.length; i++) {
-            list.add(new String(board[i])); //convert each row of the board to a string
-        }
-        return list;
-    }
-    
-    private boolean validate(int row, int col, char[][] board) {
+    private boolean isValid(int i, int j) {
+        int n = board.length;
+
         //check upper
-        for (int i = row - 1; i >= 0; i--) {
-            if (board[i][col] == 'Q') return false;
+        for (int r = i - 1; r >= 0; r--) {
+            if (board[r][j] == 'Q') return false;
         }
-        //check upper left
-        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j] == 'Q') return false;
+                
+        //chceck upper left
+        for (int r = i - 1, c = j - 1; r >= 0 && c >= 0; r--, c--) {
+            if (board[r][c] == 'Q') return false;
         }
+                
         //check upper right
-        for (int i = row - 1, j = col + 1; i >=0 && j < board.length; i--, j++) {
-            if (board[i][j] == 'Q') return false;
-        }
+        for (int r = i - 1, c = j + 1; r >= 0 && c < n; r--, c++) {
+            if (board[r][c] == 'Q') return false;
+        }        
         return true;
     }
     
+    private List<String> convert(char[][] board) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < board.length; i++) list.add(new String(board[i]));
+        return list;
+    }
 }

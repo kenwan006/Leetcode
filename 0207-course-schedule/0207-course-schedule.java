@@ -1,35 +1,30 @@
-/** Topological sorting **/
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        //build graph
-        List<Integer>[] graph = new List[numCourses];
+        List<Integer> [] graph = new List[numCourses];
         int[] indeg = new int[numCourses];
-        for (int i = 0; i < numCourses; i++) graph[i] = new ArrayList<>(); //each item has to be intialized!!
-        for (int edge[] : prerequisites) {
-            int from = edge[1], to = edge[0];
-            graph[from].add(to);
+        
+        for (int i = 0; i < numCourses; i++) graph[i] = new ArrayList<>();
+        for (int[] e : prerequisites) {
+            int from = e[1], to = e[0];
             indeg[to]++;
+            graph[from].add(to);
         }
         
-        //find vertices with 0 indegree
+        //init queue - all vertices with indeg 0
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
             if (indeg[i] == 0) queue.offer(i);
         }
         
-        //topological sorting
         int count = 0;
-        while (!queue.isEmpty()) {
-            int u = queue.poll();
-            count++;
-            for (int v : graph[u]) {
-                if (--indeg[v] == 0) {
-                    queue.add(v);
-                }
+        while(!queue.isEmpty()) {
+            int i = queue.poll(); //take course i
+            for (int adj : graph[i]) {
+                if (--indeg[adj] == 0) queue.offer(adj);
             }
+            count++;
         }
         
         return count == numCourses;
     }
 }
-//Time: O(v + e); Space: O(v)

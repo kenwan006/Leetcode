@@ -1,31 +1,31 @@
 class Solution {
-    int[] parent;
-    int[] size;
-    int count;
     public int countComponents(int n, int[][] edges) {
-        parent = new int[n];
-        size = new int[n];
-        count = n;
-        for (int i = 0; i < n; i++) parent[i] = i;
-        for (int[] edge : edges) {
-            union(edge[0], edge[1]);
+        UF uf = new UF(n);
+        for (int[] e : edges) {
+            uf.union(e[0], e[1]);
         }
-        return count;
+        return uf.n;
+    }
+}
+
+class UF {
+    int n;
+    int[] parent;
+    
+    public UF(int n) {
+        this.n = n;
+        parent = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
     }
     
-    public void union(int p, int q) {
+    public boolean union(int p, int q) {
         int rootP = find(p), rootQ = find(q);
-        if (rootP == rootQ) return;
-        
-        if (size[rootP] > size[rootQ]) {
-            parent[rootQ] = rootP;
-            size[rootP] += size[rootQ];
-        } else {
-            parent[rootP] = rootQ;
-            size[rootQ] += size[rootP];
-        }
-        count--;
+        if (rootP == rootQ) return true;
+        parent[rootQ] = rootP;
+        n--; 
+        return false;
     }
+    
     public int find(int x) {
         if (parent[x] != x) {
             parent[x] = find(parent[x]);
@@ -33,4 +33,3 @@ class Solution {
         return parent[x];
     }
 }
-//Time: O(v + e); Space: O(v)

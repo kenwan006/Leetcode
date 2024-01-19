@@ -1,45 +1,36 @@
 class Solution {
     public boolean validTree(int n, int[][] edges) {
         UF uf = new UF(n);
-        for (int[] edge : edges) {
-            int u = edge[0], v = edge[1];
-            if (!uf.union(u, v)) return false;
+        for (int[] e : edges) {
+            if (uf.union(e[0], e[1])) return false;
         }
-        return uf.count == 1;  //to avoid forester when count > 1
-    }
-    
-    class UF {
-        int[] parent;
-        int[] size;
-        int count;
-        public UF(int n) {
-            parent = new int[n];
-            size = new int[n];
-            count = n;
-            for (int i = 0; i < n; i++) parent[i] = i;
-        }
+        if (uf.n > 1) return false; //multiple trees
         
-        public boolean union(int p, int q){
-            int rootP = find(p), rootQ = find(q);
-            if (rootP == rootQ) return false; //p and q already connected
-            
-            if (size[rootP] > size[rootQ]) {
-                parent[rootQ] = rootP;
-                size[rootP] += size[rootQ];
-            } else {
-                parent[rootP] = rootQ;
-                size[rootQ] += size[rootP];
-            }
-            count--;
-            return true;
-        }
-        
-        public int find(int x) {
-            if (parent[x] != x) {
-                parent[x] = find(parent[x]);
-            }
-            return parent[x];
-        }
+        return true;
     }
 }
-//Time: O(v + e); Space: O(v)
+
+class UF{
+    int n;
+    int[] parent;
+    public UF(int n) {
+        this.n = n;
+        parent = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    
+    public boolean union(int p, int q) {
+        int rootP = find(p), rootQ = find(q);
+        if (rootP == rootQ) return true;
+        parent[rootQ] = rootP;
+        n--;
+        return false;
+    }
+    
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+}

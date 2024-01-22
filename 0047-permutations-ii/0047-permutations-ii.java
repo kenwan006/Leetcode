@@ -1,28 +1,28 @@
 class Solution {
     List<List<Integer>> res = new LinkedList<>();
     LinkedList<Integer> track = new LinkedList<>();
-    boolean[] used;
+    boolean[] visited;
     public List<List<Integer>> permuteUnique(int[] nums) {
-        used = new boolean[nums.length];
+        visited = new boolean[nums.length];
         Arrays.sort(nums);
-        backTracking(nums);
+        backtrack(nums);
         return res;
     }
     
-    private void backTracking(int[] nums) {
+    public void backtrack(int[] nums) {
         if (track.size() == nums.length) {
             res.add(new LinkedList(track));
             return;
         }
+        
         for (int i = 0; i < nums.length; i++) {
-            if (used[i]) continue;
-            if (i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue; //trimming
-            
+            if (visited[i]) continue;
+            if (i > 0 && !visited[i - 1] && nums[i] == nums[i - 1]) continue;
+            visited[i] = true;
             track.add(nums[i]);
-            used[i] = true;
-            backTracking(nums);
-            used[i] = false;
+            backtrack(nums);
             track.removeLast();
+            visited[i] = false;
         }
     }
 }

@@ -1,25 +1,24 @@
-/** dfs + heap **/
 class Solution {
     public int swimInWater(int[][] grid) {
-        int n = grid.length;
-        int depth = 0;
-        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> grid[a[0]][a[1]] - grid[b[0]][b[1]]);
-        heap.offer(new int[]{0, 0});
+        int m = grid.length, n = grid[0].length;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> grid[o1[0]][o1[1]] - grid[o2[0]][o2[1]]);
+        pq.offer(new int[]{0, 0});
+        boolean[][] visited = new boolean[m][n];
         
-        boolean[][] visited = new boolean[n][n];
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
-        while (!heap.isEmpty()) {
-            int[] curr = heap.poll();
-            depth = Math.max(depth, grid[curr[0]][curr[1]]);
-            if (curr[0] == n -1 && curr[1] == n - 1) return depth;
+        int water = 0; // water elevation
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int i = curr[0], j = curr[1];
+            water = Math.max(water, grid[i][j]);
+            if (i == m - 1 && j == n - 1) return water;
             for (int[] dir : dirs) {
-                int ii = curr[0] + dir[0], jj = curr[1] + dir[1];
-                if (ii < 0 || jj < 0 || ii >= n || jj >= n || visited[ii][jj]) continue;
-                heap.offer(new int[]{ii, jj});
+                int ii = i + dir[0], jj = j + dir[1];
+                if (ii < 0 || ii >= m || jj < 0 || jj >= n || visited[ii][jj]) continue;
                 visited[ii][jj] = true;
+                pq.offer(new int[]{ii, jj});
             }
         }
-        return -1;
+        return water;
     }
 }
-//Time: O(n * n * log(n)); Space: O(n * n)

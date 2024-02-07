@@ -1,44 +1,30 @@
-/** Backtracking **/
 class Solution {
-    Map<String, List<String>> map;
-    LinkedList<String> track;
-    int count = 0;
+    LinkedList<String> res;
+    Map<String, PriorityQueue<String>> graph;
+    
     public List<String> findItinerary(List<List<String>> tickets) {
-        map = new HashMap<>();
-        track = new LinkedList<>();
-        count = tickets.size()+ 1; 
+        res = new LinkedList<>();
+        graph = new HashMap<>();
         
-        //build the map
+        //build the graph
         for (List<String> ticket : tickets) {
-            String src = ticket.get(0), dst = ticket.get(1);
-            map.putIfAbsent(src, new ArrayList<>());
-            // the same [src, dst] could exist multiple times
-            //eg, "JFK" : {"ATL", "ATL", "SJC", "SFO"...}
-            map.get(src).add(dst); 
+            String from = ticket.get(0), to = ticket.get(1);
+            graph.putIfAbsent(from, new PriorityQueue<>());
+            graph.get(from).add(to);
         }
         
-        //sort destinations for each source in lexical order
-        for (String src : map.keySet()) {
-            Collections.sort(map.get(src));
-        }
-        track.add("JFK");
-        backTracking("JFK");
-        return track;
+        dfs("JFK");
+        return res;
     }
     
-    private boolean backTracking(String src) {
-        if (track.size() == count) return true;
-        
-        if (!map.containsKey(src)) return false;
-        
-        for (int i = 0; i < map.get(src).size(); i++) {
-            String dst = map.get(src).get(i);
-            track.add(dst);
-            map.get(src).remove(i); //remove this src -> dst from map
-            if (backTracking(dst)) return true;
-            track.removeLast();
-            map.get(src).add(i, dst); //restore the map
+    //post order traversal
+    private void dfs(String departure) {
+        PriorityQueue<String> arrivals = graph.get(departure);
+        while (arrivals != null && !arrivals.isEmpty()) {
+            String arrival = arrivals.poll(); //remvoe the visited itinerary
+            dfs(arrival);
         }
-        return false;
+        
+        res.addFirst(departure);
     }
 }

@@ -1,18 +1,26 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n]; //dp[i] - length of LIS ending with nums[i]
-        Arrays.fill(dp, 1);
-        int res = 1;
-        for (int i = 1; i < n; i++) {
-            //find all the nums[j] that is smaller than nums[i]
-            int j = i - 1;
-            while (j >= 0){
-                if (nums[j] < nums[i]) dp[i] = Math.max(dp[i], dp[j] + 1);
-                j--;
+        List<Integer> list = new ArrayList<>(); //list - increasing subsequence
+        list.add(nums[0]);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > list.get(list.size() - 1)) list.add(nums[i]); 
+            else {
+                int idx = binarySearch(list, nums[i]);
+                list.set(idx, nums[i]);
             }
-            res = Math.max(res, dp[i]);
         }
-        return res;
+        return list.size();
+    }
+    
+    //find the first idx in the list where list.get(idx) > target
+    private int binarySearch(List<Integer> list, int target) {
+        int lo = 0, hi = list.size() - 1;
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            int num = list.get(mid);
+            if (num < target) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
     }
 }

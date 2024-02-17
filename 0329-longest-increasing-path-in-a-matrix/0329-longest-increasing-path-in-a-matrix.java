@@ -1,38 +1,32 @@
-/** DFS + memoization
-* moem[i][j] - the longest increasing path starting from position (i, j);
-* For cell at (i, j), check all its neighbors to see which one bring about the longest increasing path
-*/
 class Solution {
-    private int[][] memo;
-    private static int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int[][] memo;
     
     public int longestIncreasingPath(int[][] matrix) {
         int m = matrix.length, n = matrix[0].length;
-        memo = new int[m][n];
-        int res = 0;
+        memo = new int[m][n]; // memo[i][j] - length of longest increasing path starting from matrix[i][j]
         
+        int longest = 1;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (memo[i][j] != 0) continue; // skip the already checked cell
-                res = Math.max(res, dfs(matrix, i, j));
+                if (memo[i][j] != 0) continue; // already visited
+                longest = Math.max(longest, dfs(matrix, i, j));
             }
         }
-        return res;
+        return longest;
     }
     
-    //dfs
-    public int dfs (int[][]matrix, int i, int j) {
-        int m = matrix.length, n = matrix[0].length;
+    int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    
+    private int dfs(int[][] matrix, int i, int j) {
         if (memo[i][j] != 0) return memo[i][j];
         
-        int ans = 1;
+        int path = 1;
         for (int[] dir : dirs) {
             int ii = i + dir[0], jj = j + dir[1];
-            if (ii < 0 || ii >= m || jj < 0 || jj >= n || matrix[ii][jj] <=  matrix[i][j]) continue;
-            ans= Math.max(ans, 1 + dfs(matrix, ii, jj));
+            if (ii < 0 || ii >= matrix.length || jj < 0 || jj >= matrix[0].length || matrix[ii][jj] <= matrix[i][j]) continue;
+            path = Math.max(path, 1 + dfs(matrix, ii, jj));
         }
-        memo[i][j] = ans; //update the memo
-        return ans;
+        memo[i][j] = path;
+        return path;
     }
 }
-//Time: O(m * n); Space: O(m * n)

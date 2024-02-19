@@ -1,27 +1,26 @@
 class Solution {
-    int[][] dp;
     public int maxCoins(int[] nums) {
-        int n = nums.length;
-        dp = new int[n][n];
-        return burst(0, n - 1, nums);
-    }
-    
-    private int burst(int lo, int hi, int[] nums) {
-        if (lo > hi) return 0;
-        if (dp[lo][hi] != 0) return dp[lo][hi]; //already checked
+        int n = nums.length + 2;
+        int[] arrs = new int[n];
+        for (int i = 0; i < nums.length; i++) arrs[i + 1] = nums[i];
+        arrs[0] = 1;
+        arrs[n - 1] = 1;
         
-        int coins = 0;
-        for (int i = lo; i <= hi; i++) { //i - the last balloon to burst
-            int gain = nums[i];
-            if (lo - 1 >= 0) gain *= nums[lo - 1];
-            if (hi + 1 < nums.length) gain *= nums[hi + 1];
-            
-            gain += burst(lo, i - 1, nums) + burst(i + 1, hi, nums);
-            
-            coins = Math.max(coins, gain);
+        int[][] dp = new int[n][n];
+        
+        for (int len = 1; len <= n - 2; len++) {
+            for (int lo = 1; lo < n - len; lo++) {
+                int hi = lo + len - 1;
+                int coins = 0;
+                for (int i = lo; i <= hi; i++) { // i - the last balloon to burst among [lo, hi]
+                    int gain = arrs[lo - 1] * arrs[i] * arrs[hi + 1];
+                    coins = dp[lo][i - 1] + gain + dp[i + 1][hi];
+                    
+                    dp[lo][hi] = Math.max(dp[lo][hi], coins);
+                }
+            }
         }
         
-        dp[lo][hi] = coins;
-        return coins;
+        return dp[1][n - 2];
     }
 }

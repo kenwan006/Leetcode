@@ -1,21 +1,18 @@
-/** Greedy **/
 class Solution {
     public List<Integer> partitionLabels(String s) {
-        int n = s.length();
-        Map<Character, Integer> map = new HashMap<>(); //map each letter -> farthest position in s
-        for (int i = 0; i < n; i++) map.put(s.charAt(i), i);
+        int[] last_loc = new int[26];
+        for (int i = 0; i < s.length(); i++) last_loc[s.charAt(i) - 'a'] = i; //last position of each letter
         
+        int start = 0, farthest = 0;
         List<Integer> res = new ArrayList<>();
-        int start = 0, end = 0;
-        for (int i = 0; i < n; i++) {
-            end = Math.max(end, map.get(s.charAt(i))); //update the max end of current partition
-            if (i == end) {
-                res.add(end - start + 1);
-                start = end + 1;
+        for (int i = 0; i < s.length(); i++) {
+            farthest = Math.max(farthest, last_loc[s.charAt(i) - 'a']);
+            if (farthest == i) { //comes to the end of current partition
+                res.add(i - start + 1);
+                start = i + 1; //start of next partition
+                farthest = 0;
             }
         }
         return res;
     }
 }
-//Time: O(n); Space: O(n)
-

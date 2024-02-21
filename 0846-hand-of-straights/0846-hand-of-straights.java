@@ -1,22 +1,20 @@
-/** HashMap **/
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
         if (hand.length % groupSize != 0) return false;
-        
-        Map<Integer, Integer> map = new HashMap<>(); //map card number to its freq
+        Map<Integer, Integer> map = new HashMap<>();
         for (int num : hand) map.put(num, map.getOrDefault(num, 0) + 1);
         
         Arrays.sort(hand);
+        
         for (int num : hand) {
-            if (map.get(num) <= 0) continue;
+            if (map.get(num) == 0) continue; //no such num to select
             for (int i = 0; i < groupSize; i++) {
-                int count = map.getOrDefault(num + i, 0);
-                if (count <= 0) return false;
-                map.put(num + i, count - 1);
+                if (!map.containsKey(num) || map.get(num) == 0) return false; //check if the next num is able to select
+                
+                map.put(num, map.get(num) - 1);
+                num++;
             }
         }
         return true;
     }
 }
-//Time: O(n * log(n)); Space: O(n)
-

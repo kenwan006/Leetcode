@@ -1,23 +1,24 @@
 class Solution {
     public void rotate(int[][] matrix) {
-        //reverse each column
         int m = matrix.length, n = matrix[0].length;
-        for (int j = 0; j < n; j++) {
-            for (int i = 0; i < m / 2; i++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[m - 1 - i][j];
-                matrix[m - 1 - i][j] = temp;
+        //mirror by the diagonal
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < i; j++) {
+                swap(i, j, j, i, matrix);
             }
         }
         
-        //mirror by the diagonal
+        //mirror by the middle vertical column
         for (int i = 0; i < m; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = temp;
+            for (int j = 0; j < n / 2; j++) {
+                swap(i, j, i, n - 1 - j, matrix);
             }
         }
     }
+    
+    private void swap(int i, int j, int k, int l, int[][] matrix) {
+        int temp = matrix[i][j];
+        matrix[i][j] = matrix[k][l];
+        matrix[k][l] = temp;
+    }
 }
-//Time: O(n * n); Space: O(1)

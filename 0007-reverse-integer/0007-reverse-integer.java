@@ -1,14 +1,19 @@
 class Solution {
     public int reverse(int x) {
-        int res = 0, mod = 0;
-        while (x != 0) {
-            mod = x % 10;
+        if (x == Integer.MIN_VALUE) return 0;
+        if (x < 0) return -reverse(-x);
+        
+        int MAX = Integer.MAX_VALUE;
+        
+        int num = 0;
+        while (x > 0) {
+            int carry = x % 10;
+            if ((num > MAX / 10 && carry > 0) || (num == MAX / 10 && carry > MAX % 10)) return 0;
+            
+            num = num * 10 + carry;
+            
             x /= 10;
-            if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && mod > Integer.MAX_VALUE % 10)) return 0;
-            if (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && mod < Integer.MIN_VALUE % 10)) return 0;
-            res = res * 10 + mod;
         }
-        return res;
+        return num;
     }
 }
-//Time: O(log(n)); Space: O(1)

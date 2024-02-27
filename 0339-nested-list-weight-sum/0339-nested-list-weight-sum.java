@@ -31,16 +31,12 @@ class Solution {
         return dfs(nestedList, 1);
     }
     
-    public int dfs(List<NestedInteger> list, int depth) {
-        int res = 0;
-        for (NestedInteger item : list) {
-            if (item.isInteger()) {
-                res += item.getInteger() * depth;
-            } else {
-                res += dfs(item.getList(), depth + 1);
-            }
+    private int dfs(List<NestedInteger> nestedList, int depth) {
+        int sum = 0;
+        for (NestedInteger num : nestedList) {
+            if (num.isInteger()) sum += num.getInteger() * depth;
+            else sum += dfs(num.getList(), depth + 1);
         }
-        return res;
+        return sum;
     }
 }
-//Time: O(n); Space: O(n)

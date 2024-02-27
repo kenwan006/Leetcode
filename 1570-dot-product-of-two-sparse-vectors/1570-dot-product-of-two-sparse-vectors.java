@@ -1,14 +1,25 @@
 class SparseVector {
-    int[] vector;
+    List<int[]> list;
     SparseVector(int[] nums) {
-        vector = Arrays.copyOf(nums, nums.length);
+        list = new ArrayList<>();
+        //only add the non zero and its index
+        for (int i = 0; i < nums.length; i++) list.add(new int[]{i, nums[i]});
     }
     
 	// Return the dotProduct of two sparse vectors
     public int dotProduct(SparseVector vec) {
         int product = 0;
-        for (int i = 0; i < vector.length; i++) {
-            product += this.vector[i] * vec.vector[i];
+        int m = list.size(), n = vec.list.size();
+        int i = 0, j = 0;
+        while (i < m && j < n) {
+            int idx1 = list.get(i)[0], idx2 = vec.list.get(j)[0];
+            if (idx1 == idx2) {
+                product += list.get(i++)[1] * vec.list.get(j++)[1];
+            } else if (idx1 < idx2) {
+                i++;
+            } else {
+                j++;
+            }
         }
         return product;
     }

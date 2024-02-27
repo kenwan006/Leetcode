@@ -1,28 +1,24 @@
 class Solution {
     public String minRemoveToMakeValid(String s) {
-        Stack<Integer> stack = new Stack<>(); //index of the '(' 
-        Set<Integer> removed = new HashSet<>();
-        int n = s.length();
-        for (int i = 0; i < n; i++) {
+        Stack<Integer> stack = new Stack<>(); //indices of parentheis not removed yet
+       
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
+            if (Character.isLetter(c)) continue;
+            if (c == '(') stack.push(i);
             if (c == ')') {
-                if (stack.isEmpty()) {
-                    removed.add(i);
-                } else {
-                    stack.pop();
-                }
-            } else if (c == '(') {
-                stack.push(i);
-            }
+                if (!stack.isEmpty() && s.charAt(stack.peek()) == '(') stack.pop();
+                else stack.push(i);
+            }  
         }
         
-        while (!stack.isEmpty()) removed.add(stack.pop());
+        Set<Integer> set = new HashSet<>(); //indices of parentheis that has to be removed
+        while (!stack.isEmpty()) set.add(stack.pop());
         
-        String res = "";
-        for (int i = 0; i < n; i++) {
-            if (!removed.contains(i)) res += s.charAt(i);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (!set.contains(i)) sb.append(s.charAt(i));
         }
-        return res;
-     
+        return sb.toString();
     }
 }

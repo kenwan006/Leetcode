@@ -28,14 +28,21 @@
  */
 class Solution {
     public int depthSum(List<NestedInteger> nestedList) {
-        return dfs(nestedList, 1);
-    }
-    
-    private int dfs(List<NestedInteger> nestedList, int depth) {
-        int sum = 0;
-        for (NestedInteger num : nestedList) {
-            if (num.isInteger()) sum += num.getInteger() * depth;
-            else sum += dfs(num.getList(), depth + 1);
+        Queue<NestedInteger> queue = new LinkedList<>();
+        queue.addAll(nestedList);
+        
+        int sum = 0, depth = 1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                NestedInteger num = queue.poll();
+                if (num.isInteger()) {
+                    sum += num.getInteger() * depth;
+                } else {
+                    queue.addAll(num.getList());
+                }
+            }
+            depth++;
         }
         return sum;
     }

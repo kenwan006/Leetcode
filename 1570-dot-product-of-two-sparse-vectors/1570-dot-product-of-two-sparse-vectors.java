@@ -3,7 +3,9 @@ class SparseVector {
     SparseVector(int[] nums) {
         list = new ArrayList<>();
         //only add the non zero and its index
-        for (int i = 0; i < nums.length; i++) list.add(new int[]{i, nums[i]});
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) list.add(new int[]{i, nums[i]});
+        }
     }
     
 	// Return the dotProduct of two sparse vectors

@@ -1,25 +1,16 @@
 class Solution {
     public String gcdOfStrings(String str1, String str2) {
-        if (str1.length() < str2.length()) return gcdOfStrings(str2, str1);
+        if (!(str1 + str2).equals(str2 + str1)) return "";
         
-        int n = str2.length();
-        for (int k = n; k >= 1; k--) {
-            if (n % k != 0) continue;
-            String t = str2.substring(0, k);
-            if (divisible(str1, t) && divisible(str2, t)) return t;
-        }
-        return "";
+        int gcdLen = gcd(str1.length(), str2.length());
+        return str1.substring(0, gcdLen);
     }
     
-    //check if t is divisor of s
-    private boolean divisible(String s, String t) {
-        int m = s.length(), n = t.length();
-        if (m % n != 0) return false;
-        for (int i = 0; i < m; i += n) {
-            if (!s.substring(i, i + n).equals(t)) return false;
+    private int gcd(int x, int y) {
+        if (y == 0) {
+            return x;
+        } else {
+            return gcd(y, x % y);
         }
-        return true;
     }
 }
-
-//Time: O(m * n); Space: O(1)

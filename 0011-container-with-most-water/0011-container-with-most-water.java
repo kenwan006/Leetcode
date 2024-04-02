@@ -4,9 +4,13 @@ class Solution {
         int i = 0, j = n - 1;
         int res = 0;
         while (i < j) {
-            res = Math.max(res, Math.min(height[i], height[j]) * (j - i));
-            if (height[i] < height[j]) i++;
-            else j--;
+            int h = 0, w = j - i;
+            if (height[i] < height[j]) {
+                h = height[i++];
+            } else {
+                h = height[j--];
+            }
+            res = Math.max(res, h * w);
         }
         return res;
     }

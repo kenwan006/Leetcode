@@ -3,6 +3,8 @@ class Solution {
         Map<Integer, Integer> map = new HashMap<>();
         int count = 0;
         for (int num : nums) {
+            if (num >= k) continue;
+            
             int bal = k - num;
             if (!map.containsKey(bal) || map.get(bal) < 1) {
                 map.put(num, map.getOrDefault(num, 0) + 1);

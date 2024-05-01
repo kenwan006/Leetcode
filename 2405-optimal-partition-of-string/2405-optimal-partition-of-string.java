@@ -4,7 +4,7 @@ class Solution {
         int res = 1;
         for (char c : s.toCharArray()) {
             if (visited.contains(c)) {
-                visited.clear();
+                visited = new HashSet<>();
                 res++;
             }
             visited.add(c);

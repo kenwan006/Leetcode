@@ -1,14 +1,13 @@
 class Solution {
     public List<Integer> sequentialDigits(int low, int high) {
+        String s = "123456789";
+        int lowLen = String.valueOf(low).length();
+        int highLen = String.valueOf(high).length();
+        
         List<Integer> res = new ArrayList<>();
-        for (int len = 2; len <= 9; len++) {
-            for (int start = 1; start <= 10 - len; start++) {
-                int num = 0;
-                int next = start;
-                for (int i = 0; i < len && next <= 9; i++) {
-                    num = num * 10 + next;
-                    next++;
-                }
+        for (int len = lowLen; len <= highLen; len++) {
+            for (int start = 0; start <= 9 - len; start++) {
+                int num = Integer.parseInt(s.substring(start, start + len));
                 if (num >= low && num <= high) res.add(num);
             }
         }

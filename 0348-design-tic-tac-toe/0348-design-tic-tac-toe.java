@@ -1,31 +1,48 @@
 class TicTacToe {
-    int[] rows;
-    int[] cols;
-    int diagonal;
-    int antiDiagonal;
-    int n;
-    
+    int[][] board;
+
     public TicTacToe(int n) {
-        this.n = n;
-        rows = new int[n]; //rows[i] - means the sum of this ith row
-        cols = new int[n];
+        board = new int[n][n];
     }
     
     public int move(int row, int col, int player) {
-        int toAdd = player == 1? 1 : -1;  //if it's player1, add 1; if it's player2, minus 1
-        int target = player == 1? n : -n; // if it's player1, its target is n; it's -n for the other
-        rows[row] += toAdd;
-        cols[col] += toAdd;
-        if (row == col) diagonal += toAdd;
-        if (row + col == n - 1) antiDiagonal += toAdd;
+        board[row][col] = player; //occupy the position
         
-        if (rows[row] == target || cols[col] == target || diagonal == target || antiDiagonal == target) return player;
+        if (validCol(row, col, player) || validRow(row, col, player) || validDiagonal(row, col, player) || validAntiDiagonal(row, col, player)) return player;
         return 0;
     }
+    
+    private boolean validRow(int row, int col, int player) {
+        for (int j = 0; j < board.length; j++) {
+            if (board[row][j] != player) return false;
+        }
+        return true;
+    }
+    
+    private boolean validCol(int row, int col, int player) {
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][col] != player) return false;
+        }
+        return true;
+    }
+    
+    private boolean validDiagonal(int row, int col, int player) {
+        if (row != col) return false;
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][i] != player) return false;
+        }
+        return true;
+    }
+    
+    private boolean validAntiDiagonal(int row, int col, int player) {
+        int n = board.length;
+        if (row + col != n - 1) return false;
+        for (int i = 0; i < n; i++) {
+            if (board[i][n - 1 - i] != player) return false;
+        }
+        return true;
+    }
 }
-
-//Time: O(1);Space: O(n)
-
 
 /**
  * Your TicTacToe object will be instantiated and called as such:

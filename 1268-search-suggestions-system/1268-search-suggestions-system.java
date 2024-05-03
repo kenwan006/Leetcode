@@ -35,3 +35,5 @@ class Solution {
         public Trie(){}
     }
 }
+
+//Time: O(m), m is the total chars in the products; Space: O(n) - n is the number of products

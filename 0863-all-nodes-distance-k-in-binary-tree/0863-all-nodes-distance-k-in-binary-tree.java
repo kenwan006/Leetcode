@@ -8,31 +8,35 @@
  * }
  */
 class Solution {
+    Map<Integer, List<Integer>> graph;
+    Set<Integer> visited;
+    List<Integer> res;
+        
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
         //build graph
-        Map<Integer, List<Integer>> graph = new HashMap<>();
+        graph = new HashMap<>();
         build(root, null, graph);
         
-        //bfs - find the node with distance k from the target node
-        LinkedList<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        queue.offer(target.val);
-        visited.add(target.val);
-        
-        while (!queue.isEmpty() && k > 0) {
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int curr = queue.poll();
-                for (int next : graph.get(curr)) {
-                    if (visited.contains(next)) continue;
-                    visited.add(next);
-                    queue.offer(next);
-                }
-            }
-            k--;
-        }
-        return queue;
+        //dfs - find the node with distance k from the target node
+        res = new ArrayList<>();
+        visited = new HashSet<>();
+        dfs(target.val, 0, k);
+        return res;
     }
+    
+    private void dfs(int src, int dist, int k) {
+        if (visited.contains(src)) return;
+        visited.add(src);
+        
+        if (dist == k) {
+            res.add(src);
+            return;
+        }
+        
+        for (int next : graph.get(src)) dfs(next, dist + 1, k);
+    }
+    
+    
     
     //build a undirected graph
     private void build(TreeNode root, TreeNode parent, Map<Integer, List<Integer>> graph) {

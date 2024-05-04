@@ -41,16 +41,11 @@ class Solution {
         
         if (parent != null) {
             graph.get(root.val).add(parent.val);
+            graph.get(parent.val).add(root.val);
         }
-        
-        if (root.left != null) {
-            graph.get(root.val).add(root.left.val);
-            build(root.left, root, graph);
-        }
-        if (root.right != null) {
-            graph.get(root.val).add(root.right.val);
-            build(root.right, root, graph);
-        }
+
+        build(root.left, root, graph);
+        build(root.right, root, graph);
     }
 }
 

@@ -1,35 +1,23 @@
 class Solution {
-    List<String> res = new ArrayList<>();
+    List<String> res;
     public List<String> restoreIpAddresses(String s) {
-        StringBuilder sb = new StringBuilder(s);
-        backTracking(sb, 0, 0);
+        res = new ArrayList<>();
+        dfs(0, 0, s, "");
         return res;
     }
     
-    private void backTracking(StringBuilder sb, int start, int dotNum) {
-        if (start >= sb.length()) return;
-        if (dotNum == 3) {
-            if (valid(sb, start, sb.length() - 1)) res.add(sb.toString());
+    private void dfs(int i, int dots, String s, String ip) {
+        if (dots == 4) {
+            if (i == s.length()) res.add(ip);
             return;
         }
         
-        for (int i = start; i < sb.length(); i++) {
-            if (!valid(sb, start, i)) break;
-            sb.insert(i + 1, '.');
-            backTracking(sb, i + 2, dotNum + 1); 
-            sb.deleteCharAt(i + 1); //remove dot
+        for (int len = 1; len <= 3 && i + len <= s.length(); len++) {
+            String str = s.substring(i, i + len);
+            if (str.startsWith("0") && len > 1 || Integer.parseInt(str) > 255) break;
+            String newIp = ip + str;
+            if (dots < 3) newIp += ".";
+            dfs(i + len, dots + 1, s, newIp);
         }
-    }
-    
-    private boolean valid(StringBuilder sb, int start, int end) {
-        if (sb.charAt(start) == '0' && start != end) return false;
-        int num = 0;
-        for(int i = start; i <= end; i++){
-            int digit = sb.charAt(i) - '0';
-            num = num * 10 + digit;
-            if(num > 255)
-                return false;
-        }
-        return true;
     }
 }

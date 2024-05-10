@@ -14,46 +14,32 @@
  * }
  */
 class Solution {
+    int amount = 0;
     public int amountOfTime(TreeNode root, int start) {
-        Map<Integer, Set<Integer>> graph = new HashMap<>();
-        dfs(root, null, graph);
-        
-        //bfs
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        queue.offer(start);
-        visited.add(start);
-        
-        int time = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int curr = queue.poll();
-                for (int next : graph.get(curr)) {
-                    if (visited.contains(next)) continue;
-                    queue.offer(next);
-                    visited.add(next);
-                }
-            }
-            time++;
-        }
-        return time - 1;
+        dfs(root, start);
+        return amount;
     }
     
-    private void dfs(TreeNode root, TreeNode parent, Map<Integer, Set<Integer>> graph) {
-        if (root == null) return;
+    /**
+    * Return the depth of tree
+    * If both left and right child have depth >= 0, then depth of the tree is positive
+    * If start at the root, then depth of root is -1
+    * Any subtree contains the start has negative depth
+    */
+    private int dfs(TreeNode root, int start) {
+        if (root == null) return 0;
         
-        if (!graph.containsKey(root.val)) graph.put(root.val, new HashSet<>());
+        int left = dfs(root.left, start);
+        int right = dfs(root.right, start);
         
-        Set<Integer> adj = graph.get(root.val);
-        
-        if (parent != null) adj.add(parent.val);
-        
-        if (root.left != null) adj.add(root.left.val);
-        
-        if (root.right != null) adj.add(root.right.val);
-        
-        dfs(root.left, root, graph);
-        dfs(root.right, root, graph);
+        if (root.val == start) {
+            amount = Math.max(left, right); //the max depth could be one child
+            return -1;
+        } else if (left >= 0 && right >= 0) { //start is not in this sub-tree
+            return Math.max(left, right) + 1;
+        } else {
+            amount = Math.max(amount, Math.abs(right - left));
+            return Math.min(left, right) - 1;
+        }
     }
 }

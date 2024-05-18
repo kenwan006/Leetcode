@@ -1,30 +1,39 @@
 class Solution {
-    private final int[][] dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}, {-1, -1}, {1, 1}, {-1, 1}, {1, -1}};
+    int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+    
     public char[][] updateBoard(char[][] board, int[] click) {
-        //check if we click the unrevealed mine
+        int m = board.length, n = board[0].length;
         int i = click[0], j = click[1];
         if (board[i][j] == 'M') {
             board[i][j] = 'X';
-        } else {
-            dfs(i, j, board);
+            return board;
+        }
+        
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(click);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int k = 0; k < size; k++) {
+                int[] curr = queue.poll();
+                int row = curr[0], col = curr[1];
+                int mines = count(row, col, board);
+                if (mines > 0) {
+                    board[row][col] = (char)('0' + mines);
+                } else {
+                    board[row][col] = 'B';
+                    for (int[] dir : dirs) {
+                        int r = row + dir[0], c = col + dir[1];
+                        if (r < 0 || c < 0 || r >= m || c >= n || board[r][c] != 'E') continue;
+                        board[r][c] = 'B'; //mark as visited to avoid duplicate add to queue
+                        queue.offer(new int[]{r, c});
+                    }
+                }
+            }
         }
         return board;
     }
     
-    private void dfs(int i, int j, char[][] board) {
-        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] != 'E') return;
-        
-        int mines = count(i, j, board); //count the 'M' around the cell
-        if (mines > 0) {
-            board[i][j] = (char) ('0' + mines); 
-        } else {//only the 'E' without any mines around it can spread out
-            board[i][j] = 'B';
-            for (int[] dir : dirs) {
-                dfs(i + dir[0], j + dir[1], board);
-            }
-        }
-    }
-    
+    //count the mines around a 'E'
     private int count(int i, int j, char[][] board) {
         int count = 0;
         for (int[] dir : dirs) {

@@ -2,17 +2,26 @@ class Solution {
     public int[] nextGreaterElements(int[] nums) {
         int n = nums.length;
         int[] res = new int[n];
+        Arrays.fill(res, -1);
+        
+        Stack<Integer> stack = new Stack<>(); //monotonic stack in decreasing order
+        
+        //first pass
         for (int i = 0; i < n; i++) {
-            int curr_max = nums[i];
-            for (int j = i + 1; j < n * 2; j++) {
-                if (nums[j % n] > nums[i]) {
-                    curr_max = nums[j % n];
-                    break;
-                }
+            while (!stack.isEmpty() && nums[i] > nums[stack.peek()]) {
+                res[stack.pop()] = nums[i];
             }
-            if (curr_max == nums[i]) res[i] = -1;
-            else res[i] = curr_max;
+            stack.push(i);
         }
+        
+        //second pass - because we may have some left still left on the stack
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && nums[i] > nums[stack.peek()]) {
+                res[stack.pop()] = nums[i];
+            }
+            stack.push(i);
+        }
+        
         return res;
     }
 }

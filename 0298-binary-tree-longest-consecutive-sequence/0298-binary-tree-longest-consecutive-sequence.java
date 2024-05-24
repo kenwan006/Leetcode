@@ -14,24 +14,27 @@
  * }
  */
 class Solution {
-    int longest = 1;
+    private int longest = 1;
+    
     public int longestConsecutive(TreeNode root) {
-        dfs(null, root, 1);
+        if (root == null) return 0;
+        dfs(root, root.left, 1);
+        dfs(root, root.right, 1);
         return longest;
     }
     
     private void dfs(TreeNode parent, TreeNode root, int path) {
-        longest = Math.max(longest, path);
-        
         if (root == null) return;
         
-        if (parent != null && parent.val + 1 == root.val) {
+        if (root.val == parent.val + 1) {
             path++;
         } else {
             path = 1;
         }
+        longest = Math.max(longest, path);
         
         dfs(root, root.left, path);
         dfs(root, root.right, path);
+        
     }
 }

@@ -13,29 +13,26 @@
  *     }
  * }
  */
-/** DFS **/
 class Solution {
     List<List<Integer>> res;
-    LinkedList<Integer> path;
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        res = new LinkedList<>();
-        path = new LinkedList<>();
-        dfs(root, targetSum);
+        res = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(root, targetSum, 0, path);
         return res;
     }
     
-    private void dfs(TreeNode root, int targetSum) {
+    private void dfs(TreeNode root, int targetSum, int pathSum, List<Integer> path) {
         if (root == null) return;
-        
+        pathSum += root.val;
         path.add(root.val);
+        if (root.left == null && root.right == null && pathSum == targetSum) res.add(new ArrayList<>(path));
         
-        if (root.left == null && root.right == null && targetSum - root.val == 0) {
-                res.add(new LinkedList<>(path));
-        } else {
-            dfs(root.left, targetSum - root.val);
-            dfs(root.right, targetSum - root.val);
-        }
-       
+        dfs(root.left, targetSum, pathSum, path);
+        dfs(root.right, targetSum, pathSum, path);
+        
+        pathSum -= root.val;
         path.removeLast();
     }
+
 }

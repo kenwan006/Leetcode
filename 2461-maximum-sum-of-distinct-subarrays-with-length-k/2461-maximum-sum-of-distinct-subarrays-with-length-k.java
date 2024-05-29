@@ -3,24 +3,25 @@ class Solution {
         Map<Integer, Integer> map = new HashMap<>(); //map num -> its freq
         long max_sum = 0;
         long sub_sum = 0;
-        int cnt; //distinct number in the sliding window
+        int cnt = 0; //distinct number in the sliding window
         
         //sliding window [i...j]
         for (int j = 0; j < nums.length; j++) {
             int num = nums[j];
+            if (!map.containsKey(num) || map.get(num) == 0) cnt++;
             map.put(num, map.getOrDefault(num, 0) + 1);
             sub_sum += num;
             
             //check if we need to remove the most left
             if (j >= k) {
-                int i = j - k;
-                sub_sum -= nums[i];
-                if (map.get(nums[i]) == 1) map.remove(nums[i]);
-                else map.put(nums[i], map.get(nums[i]) - 1);
+                int lnum = nums[j - k];
+                map.put(lnum, map.get(lnum) - 1);
+                sub_sum -= lnum;
+                if (map.get(lnum) == 0) cnt--;
             }
             
             //check if the sliding window has k distinct num
-            if (map.size() == k) {
+            if (cnt == k) {
                 max_sum = Math.max(max_sum, sub_sum);
             }
         }

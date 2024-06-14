@@ -1,1 +1,1 @@
-​
+remove the key from map if value is empty

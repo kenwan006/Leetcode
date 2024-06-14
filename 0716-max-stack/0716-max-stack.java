@@ -1,7 +1,7 @@
 class MaxStack {
-    TreeMap<Integer, LinkedList<Node>> map; //num -> list of nodes with the same val
+    TreeMap<Integer, LinkedList<Node>> map;
     Node head;
-    Node tail; //use a doubly linkedlist to store all items like head <=> node1 <=>node2 ...node(n-1) <=> tail
+    Node tail;
     
     public MaxStack() {
         map = new TreeMap<>();
@@ -11,59 +11,57 @@ class MaxStack {
         tail.prev = head;
     }
     
-    public void push(int x) { //O(1)
-         Node node = new Node(x);
-        
-        //add to end of the doubly list
+    public void push(int x) {
+        //add the node to end of the doubly linked list
+        Node node = new Node(x);
         node.next = tail;
         node.prev = tail.prev;
         tail.prev.next = node;
         tail.prev = node;
         
-        //add to map
+        //add the node to the map
         map.putIfAbsent(x, new LinkedList<>());
-        map.get(x).add(node);
+        map.get(x).add(node); //log(n)
     }
     
-    public int pop() { //O(logn) as remove x from treemap
-        Node node = tail.prev;
-        int x = node.val;
+    public int pop() {
+        int x = tail.prev.val;
         
-        //remove from doubly list
+        //remove the node from the end of the doubly linked list
         tail.prev.prev.next = tail;
         tail.prev = tail.prev.prev;
         
-        //remove from map
-        map.get(x).removeLast(); //x is mapped to multiple nodes, remove the top one
-        if (map.get(x).isEmpty()) map.remove(x);
+        
+        //remove the node from the map
+        map.get(x).removeLast(); //log(n)
+        if (map.get(x).isEmpty()) map.remove(x); //remove the key if its value is empty
         
         return x;
+        
     }
     
-    public int top() { //O(1)
+    public int top() {
         return tail.prev.val;
     }
     
-    public int peekMax() { //O(logn) as get the largest key from the treemap
-        return map.lastKey();
+    public int peekMax() {
+        return map.lastKey(); //log(n)
     }
     
-    public int popMax() { //O(logn)
+    public int popMax() {
+        //remove the node from the map
         int x = map.lastKey();
-        Node node = map.get(x).getLast();
+        Node node = map.get(x).removeLast();
+        if (map.get(x).isEmpty()) map.remove(x); 
         
-        //remove from doubly list
+        //remove from the doubly linked list
         node.prev.next = node.next;
         node.next.prev = node.prev;
-        
-        //remove from map
-        map.get(x).removeLast();
-        if (map.get(x).isEmpty()) map.remove(x);
         
         return x;
     }
     
-    class Node {
+    class Node{
         int val;
         Node prev;
         Node next;

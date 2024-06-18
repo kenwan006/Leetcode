@@ -1,4 +1,6 @@
 class Solution {
+    int res = 0;
+    
     public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
         Map<Integer, List<Integer>> map = new HashMap<>(); //map managerID -> his employees ID
         for (int i = 0; i < n; i++) {
@@ -6,24 +8,17 @@ class Solution {
             map.get(manager[i]).add(i);
         }
         
-        LinkedList<Integer> queue = new LinkedList<>();
-        queue.offer(headID);
+        dfs(map, informTime, headID, 0);
         
-        int[] times = new int[n]; //time when ith employee get informed
-        
-        int res = 0;
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int currID = queue.poll();
-                int managerID = manager[currID];
-                if (currID != headID) times[currID] = times[managerID] + informTime[managerID];
-                
-                if (map.containsKey(currID)) queue.addAll(map.get(currID));
-                
-                res = Math.max(res, times[currID]);
-            }
-        }
         return res;
+    }
+    
+    private void dfs(Map<Integer, List<Integer>> map, int[] informTime, int currID, int currTime) {
+        res = Math.max(res, currTime);
+        if (!map.containsKey(currID)) return;
+        
+        for (int adj : map.get(currID)) {
+            dfs(map, informTime, adj, currTime + informTime[currID]);
+        }
     }
 }

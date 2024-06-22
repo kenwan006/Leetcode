@@ -20,7 +20,7 @@ class Solution {
                 count[cl - 'a']++;
             }
             
-            max = Math.max(max, j - i + 1);
+            max = Math.max(max, j - i + 1); //find the max size of the sliding window
         }
         
         return n - max;

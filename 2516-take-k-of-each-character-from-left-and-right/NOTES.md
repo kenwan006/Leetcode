@@ -1,1 +1,2 @@
-sliding window
+- sliding window
+- the sliding window has at most (total_a - k) 'a', (total_b -k) 'b', (total_c - k) 'c', find the max size of this sliding window, then the rest chars outside the window is the result we need.

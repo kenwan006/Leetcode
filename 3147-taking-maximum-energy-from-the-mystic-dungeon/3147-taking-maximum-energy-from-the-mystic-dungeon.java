@@ -1,31 +1,16 @@
 class Solution {
-    int res = Integer.MIN_VALUE;
-    
     public int maximumEnergy(int[] energy, int k) {
         int n = energy.length;
-        int[] memo = new int[n];
-        Arrays.fill(memo, Integer.MIN_VALUE);
+        int[] dp = new int[n];
+        int res = Integer.MIN_VALUE;
         
-        for (int i = 0; i < n; i++) {
-            if (memo[i] != Integer.MIN_VALUE) continue;
-            dfs(i, k, energy, memo);
+        for (int i = n - 1; i >= n - k; i--) { //we only need to check kth num for the outer loop
+            for (int j = i; j >= 0; j -= k) {
+                if (j >= n - k) dp[j] = energy[j];
+                else dp[j] = energy[j] + dp[j + k];
+                res = Math.max(res, dp[j]);
+            }
         }
         return res;
     }
-    
-    //max energy starting from index i
-    private int dfs(int i, int k, int[] energy, int[] memo) {
-        if (i >= memo.length) return 0;
-        if (memo[i] != Integer.MIN_VALUE) return memo[i];
-        
-        int sum = 0;
-        sum = energy[i] + dfs(i + k, k, energy, memo);
-        
-        memo[i] = sum;
-        res = Math.max(res, memo[i]);
-        
-        return sum;
-    }
 }
-
-//top-down dp

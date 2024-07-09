@@ -10,14 +10,14 @@ class Node {
 
 class Solution {
     public Node lowestCommonAncestor(Node p, Node q) {
-        //store all ancestors of node p including itself
+        //find all ancestors of p, including p
         Set<Node> ancestors = new HashSet<>();
         while (p != null) {
             ancestors.add(p);
             p = p.parent;
         }
         
-        //find the lowest ancestor of p that is also q's ancestor
+        //check the lowest ancestor of q that exist in p's ancestors
         while (q != null) {
             if (ancestors.contains(q)) return q;
             q = q.parent;

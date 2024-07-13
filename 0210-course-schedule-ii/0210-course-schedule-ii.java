@@ -1,30 +1,31 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        List<Integer>[] graph = new List[numCourses];
+        //build graph
+        List<Integer>[] g = new List[numCourses];
+        for (int i = 0; i < numCourses; i++) g[i] = new ArrayList<>();
         int[] indeg = new int[numCourses];
-        
-        for (int i = 0; i < numCourses; i++) graph[i] = new ArrayList<>();
         for (int[] e : prerequisites) {
             int from = e[1], to = e[0];
+            g[from].add(to);
             indeg[to]++;
-            graph[from].add(to);
         }
         
-        //init queue - vertices with 0 indeg
+        //find the nodes with 0 indeg
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
             if (indeg[i] == 0) queue.offer(i);
         }
         
+        //toplogical sorting
+        int count = 0;
         int[] res = new int[numCourses];
-        int idx = 0;
         while (!queue.isEmpty()) {
-            int node = queue.poll(); //take the course 
-            res[idx++] = node;
-            for (int adj : graph[node]) {
+            int curr= queue.poll();
+            res[count++] = curr;
+            for (int adj : g[curr]) {
                 if (--indeg[adj] == 0) queue.offer(adj);
             }
         }
-        return idx == numCourses? res : new int[0];
+        return count == numCourses? res : new int[0];
     }
 }

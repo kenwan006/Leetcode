@@ -14,23 +14,25 @@
  * }
  */
 class Solution {
-    public int rob(TreeNode root) {
-        int[] res = helper(root);
-        return Math.max(res[0], res[1]);
-    }
+    Map<TreeNode, Integer> memo = new HashMap<>();
     
-    //return an array - {notRob, rob}
-    //notRob - max amount of money to rob if skip the root; rob - max amount of money to rob if root if robbed
-    private int[] helper (TreeNode root) { 
-        int[] res = new int[2];
-        if (root == null) return res;
+    public int rob(TreeNode root) {
+        if (root == null) return 0;
+        if (memo.containsKey(root)) return memo.get(root);
         
-        int[] left = helper(root.left);
-        int[] right = helper(root.right);
+        int robb = root.val;
+        if (root.left != null) {
+            robb = robb + rob(root.left.left) + rob(root.left.right);
+        }
+        if (root.right != null) {
+            robb = robb + rob(root.right.left) + rob(root.right.right);
+        }
         
-        int robRoot = root.val + left[0] + right[0];
-        int notRobRoot = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+        int notRobb = rob(root.left) + rob(root.right);
         
-        return new int[]{notRobRoot, robRoot};
+        int res = Math.max(robb, notRobb);
+        memo.put(root, res);
+        
+        return res;
     }
 }

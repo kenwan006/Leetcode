@@ -14,32 +14,41 @@
  * }
  */
 class Solution {
-    int amount = 0;
     public int amountOfTime(TreeNode root, int start) {
-        dfs(root, start);
-        return amount;
+        //build the graph
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        dfs(root, null, map);
+        
+        //bfs
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(start);
+        Set<Integer> visited = new HashSet<>();
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int curr = queue.poll();
+                visited.add(curr);
+                for (int adj : map.get(curr)) {
+                    if (visited.contains(adj)) continue;
+                    queue.offer(adj);
+                }
+            }
+            count++;
+        }
+        return count - 1;
+        
     }
     
-    /**
-    * Return the depth of tree
-    * If both left and right child have depth >= 0, then depth of the tree is positive
-    * If start at the root, then depth of root is -1
-    * Any subtree contains the start has negative depth
-    */
-    private int dfs(TreeNode root, int start) {
-        if (root == null) return 0;
+    private void dfs(TreeNode root, TreeNode parent, Map<Integer, List<Integer>> map) {
+        if (root == null) return;
         
-        int left = dfs(root.left, start);
-        int right = dfs(root.right, start);
-        
-        if (root.val == start) {
-            amount = Math.max(left, right); //the max depth could be one child
-            return -1;
-        } else if (left >= 0 && right >= 0) { //start is not in this sub-tree
-            return Math.max(left, right) + 1;
-        } else {
-            amount = Math.max(amount, Math.abs(right - left));
-            return Math.min(left, right) - 1;
+        map.putIfAbsent(root.val, new ArrayList<>());
+        if (parent != null) {
+            map.get(root.val).add(parent.val);
+            map.get(parent.val).add(root.val);
         }
+         dfs(root.left, root, map);
+         dfs(root.right, root, map);
     }
 }

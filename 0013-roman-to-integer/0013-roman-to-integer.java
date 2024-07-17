@@ -1,22 +1,21 @@
 class Solution {
     public int romanToInt(String s) {
-        Map<Character, Integer> dict = new HashMap<>();
-        int n = s.length();
-        dict.put('I', 1); 
-        dict.put('V', 5);
-        dict.put('X', 10);
-        dict.put('L', 50);
-        dict.put('C', 100);
-        dict.put('D', 500);
-        dict.put('M', 1000);
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
         
-        int res = dict.get(s.charAt(n - 1));
-        for (int i = n - 2; i >= 0; i--) {
-            char c = s.charAt(i), c1 = s.charAt(i + 1);
-            if (dict.get(c) >= dict.get(c1)) res += dict.get(c);
-            else res -= dict.get(c); // smaller number in front of larger number, then deduct this smaller number
+        int res = 0, n = s.length();
+        for (int i = 0; i < n - 1; i++) {
+            int num1 = map.get(s.charAt(i)), num2 = map.get(s.charAt(i + 1));
+            if (num1 < num2) res -= num1;
+            else res += num1;
         }
+        res += map.get(s.charAt(n - 1));
         return res;
     }
 }
-//Time: O(n); Space: O(1)
